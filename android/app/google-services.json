@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1097917674867",
+    "project_id": "polroti-sriwallet",
+    "storage_bucket": "polroti-sriwallet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1097917674867:android:9cc70f54c0577a9a250106",
+        "android_client_info": {
+          "package_name": "com.polroti.sriwallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1097917674867-fbqr6m5son8mp5t4k0db7o7v4vrnvg2q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.polroti.sriwallet",
+            "certificate_hash": "d0ccdcbcb79310ce2505a7c8c8654a4e31deeea2"
+          }
+        },
+        {
+          "client_id": "1097917674867-on8rug9mil1853fv4o8k2nvff638qu09.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiWX-Oy5SevIEoIkIv5vI0ca7ZuDcMzqI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1097917674867-on8rug9mil1853fv4o8k2nvff638qu09.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
