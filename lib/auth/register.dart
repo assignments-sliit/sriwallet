@@ -213,6 +213,6 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-Widget nameInput() {
-  return 
-}
+// Widget nameInput() {
+//   return 
+// }
