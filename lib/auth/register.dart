@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -18,12 +20,17 @@ class _RegisterPageState extends State<RegisterPage> {
   bool verificationSent = false;
   bool phoneNumberFilled = false;
 
+  TextEditingController nameController = TextEditingController();
+  TextEditingController nicController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController phoneNoControlller = TextEditingController();
   TextEditingController codeController = TextEditingController();
 
   bool isOtpFilled = false;
 
   FirebaseAuth auth = FirebaseAuth.instance;
+
+  FirebaseFirestore db = FirebaseFirestore.instance;
 
   String phoneNumber = "";
   String verificationIdReceived = "";
@@ -35,28 +42,36 @@ class _RegisterPageState extends State<RegisterPage> {
         title: const Text("Register"),
       ),
       body: SingleChildScrollView(
-        child: Column(
-            //  mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Form(
-                  child: Column(
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  registerWithPhoneNoText(),
-                  phoneNumberInput(),
-                  masterButton(),
-                //  nameInput(),
-
-                  // const Text("OR"),
-                  // const Divider(),
-                  // const Text("Verify with GOOGLE"),
-                  // ElevatedButton.icon(
-                  //     onPressed: () {},
-                  //     icon: const FaIcon(FontAwesomeIcons.google),
-                  //     label: const Text("SIGN UP WITH GOOGLE")),
-                ],
-              )),
-            ]),
+        child: Form(
+          key: _registerPageKey,
+          child: Column(
+              //  mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Form(
+                    child: Column(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    registerWithPhoneNoText(),
+        
+                    nameInput(),
+                    nicInput(),
+                    emailInput(),
+                    phoneNumberInput(),
+                    otpInput(),
+                    masterButton(),
+                    
+        
+                    // const Text("OR"),
+                    // const Divider(),
+                    // const Text("Verify with GOOGLE"),
+                    // ElevatedButton.icon(
+                    //     onPressed: () {},
+                    //     icon: const FaIcon(FontAwesomeIcons.google),
+                    //     label: const Text("SIGN UP WITH GOOGLE")),
+                  ],
+                )),
+              ]),
+        ),
       ),
     );
   }
@@ -204,15 +219,103 @@ class _RegisterPageState extends State<RegisterPage> {
                 if (!verificationSent) {
                   verifyMobile();
                 } else {
-                  loginWithMobileNo(context);
+                  if(_registerPageKey.currentState!.validate()){
+                    loginWithMobileNo(context);
+                  }
+                  
                 }
               },
         child: Text(!verificationSent ? "Send OTP" : "LOGIN"),
       ),
     );
   }
-}
 
-// Widget nameInput() {
-//   return 
-// }
+  createUser(){
+    final newUserData = <String,String>{
+      "fullname": nameController.text,
+      "email":emailController.text,
+
+    };
+
+    db.collection("users").add(newUserData).then((DocumentReference doc) => {
+      print(doc.id)
+    });
+  }
+
+  Widget nameInput() {
+    return Padding(
+      padding:  const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
+      child: TextFormField(
+        controller: nameController,
+        decoration: InputDecoration(
+            label: const Text("Full Name"),
+            counterText: "",
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide: BorderSide(color: Theme.of(context).primaryColor))),
+      ),
+    );
+  }
+
+  Widget nicInput() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
+      child: TextFormField(
+        controller: nicController,
+        validator: nicValidator,
+      //  onChanged: nicValidator,
+        decoration: InputDecoration(
+            label: const Text("NIC"),
+            counterText: "",
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide: BorderSide(color: Theme.of(context).primaryColor))),
+      ),
+    );
+  }
+
+  Widget emailInput() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
+      child: TextFormField(
+        controller: emailController,
+        validator: emailValidator,
+        keyboardType: TextInputType.emailAddress,
+        decoration: InputDecoration(
+            label: const Text("Email Address"),
+            counterText: "",
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide: BorderSide(color: Theme.of(context).primaryColor))),
+      ),
+    );
+  }
+
+  String nicValidator(String? input) {
+    String pattern = r'^([0-9]{9}[x|X|v|V]|[0-9]{12})$)';
+    //regexp obtained from https://www.regextester.com/100137
+    RegExp exp = RegExp(pattern);
+
+    if (exp.hasMatch(input!)) {
+      print(exp.hasMatch(input));
+      return "";
+    } else {
+      return "INVALID NIC";
+    }
+
+    // return exp.hasMatch(input!);
+  }
+
+  String emailValidator(String? input) {
+    String pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = RegExp(pattern);
+    if (!regex.hasMatch(input!)) {
+      return "INVALID EMAIL";
+    } else {
+      return "";
+    }
+  }
+
+
+}
