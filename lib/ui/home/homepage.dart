@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sriwallet/auth/login.dart';
 import 'package:sriwallet/auth/register.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,24 +14,33 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
-    FirebaseFirestore db = FirebaseFirestore.instance;
+  FirebaseFirestore db = FirebaseFirestore.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  String? displayName;
+  String? displayName = "";
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
-
-
+    getUserData();
   }
 
-  Future<void> getUserData(){
-    return db.collection('users').where("uid",isEqualTo: auth.currentUser!.uid).get().then((value) => {
-        
-    });
+  getUserData() {
+    final userRef =
+        db.collection('users').where("uid", isEqualTo: auth.currentUser?.uid);
+
+    Map userdata;
+    String? name;
+    userRef.get().then((value) => {
+          userdata = value.docs.first.data(),
+          displayName = userdata["fullname"].toString().split(" ")[0]
+        });
+
+    if (name != null) {
+      setState(() {
+        displayName = name;
+      });
+    }
   }
 
   @override
@@ -40,9 +50,10 @@ class _HomePageState extends State<HomePage> {
         return false;
       }),
       child: Scaffold(
+        backgroundColor: Colors.grey[300],
         appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: const Text("Welcome polroti!")),
+            title: Text("Welcome ${displayName} !")),
         body: Center(
           child: ElevatedButton(
               onPressed: () {
@@ -50,10 +61,10 @@ class _HomePageState extends State<HomePage> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const RegisterPage()))
+                              builder: (context) => const LoginPage()))
                     });
               },
-              child: const Text("Set avam apa")),
+              child: const Text("SIGN OUT")),
         ),
       ),
     );

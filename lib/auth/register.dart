@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
+import 'package:sriwallet/auth/login.dart';
 import 'package:sriwallet/ui/home/homepage.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -33,13 +35,30 @@ class _RegisterPageState extends State<RegisterPage> {
   FirebaseFirestore db = FirebaseFirestore.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-
-
   String phoneNumber = "";
   String verificationIdReceived = "";
+  String dialogMessage = "";
+
+  late ProgressDialog progressDialog;
+ 
 
   @override
   Widget build(BuildContext context) {
+    progressDialog = ProgressDialog(context, type: ProgressDialogType.normal);
+    progressDialog.style(
+        message: dialogMessage,
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: const CircularProgressIndicator(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progress: 0.0,
+        maxProgress: 100.0,
+        progressTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Register"),
@@ -50,19 +69,22 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
               //  mainAxisAlignment: MainAxisAlignment.center,
               children: [
+              //  ToggleButtons(children: children, isSelected: isSelected),
+
                 Form(
                     child: Column(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
+                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    registerWithPhoneNoText(),
-        
-                    nameInput(),
-                    nicInput(),
-                    emailInput(),
-                    phoneNumberInput(),
-                    otpInput(),
-                    masterButton(),
                     
+                        registerWithPhoneNoText(),
+                        nameInput(),
+                        nicInput(),
+                        emailInput(),
+                        phoneNumberInput(),
+                        otpInput(),
+                        masterButton(),
+                    const SizedBox(height: 100,),
+                    goAndLogin()
                   ],
                 )),
               ]),
@@ -87,13 +109,12 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-
   Widget registerWithPhoneNoText() {
     return Row(
       children: const [
         Expanded(
           child: Padding(
-            padding: EdgeInsets.only(top: 50, bottom: 20),
+            padding: EdgeInsets.only(top: 20, bottom: 20),
             child: Text(
               "Register with your phone number",
               textAlign: TextAlign.center,
@@ -160,7 +181,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: TextFormField(
                   onChanged: (value) {
                     if (value.length == 6) {
-                      FocusScope.of(context).nextFocus();
+                      //   FocusScope.of(context).nextFocus();
                       setState(() {
                         isOtpFilled = true;
                       });
@@ -192,7 +213,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget masterButton() {
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.only(left: 20, right: 10),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           minimumSize: const Size.fromHeight(50),
@@ -203,50 +224,75 @@ class _RegisterPageState extends State<RegisterPage> {
                 if (!verificationSent) {
                   verifyMobile();
                 } else {
-                  if(_registerPageKey.currentState!.validate()){
+                  if (_registerPageKey.currentState!.validate()) {
                     
                     loginWithMobileNo(context);
-                   
-
                   }
-                  
                 }
               },
-        child: Text(!verificationSent ? "Send OTP" : "LOGIN"),
+        child: Text(!verificationSent ? "Send OTP" : "Register with Mobile"),
+      ),
+    );
+  }
+
+    Widget goAndLogin() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 10),
+      child: ElevatedButton(  
+        style: ElevatedButton.styleFrom(
+          primary: Colors.lightBlue[500],
+          minimumSize: const Size.fromHeight(50),
+        ),
+        onPressed: () {
+                Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()));
+              },
+        child: const Text("LOGIN"),
       ),
     );
   }
 
   void loginWithMobileNo(BuildContext context) async {
+    await progressDialog.show();
     PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
         verificationId: verificationIdReceived, smsCode: codeController.text);
 
     await auth.signInWithCredential(phoneAuthCredential).then((value) => {
           {
-            print(value),
-             createUser(),
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const HomePage()))
+            dialogMessage = "Creating user...",
+            createUser(),
+            dialogMessage = "Logging in...",
+            progressDialog.hide().then((value) => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage())))
           }
         });
   }
-  Future<void> createUser(){
-    final newUserData = <String,dynamic>{
+
+  Future<void> createUser() {
+    final newUserData = <String, dynamic>{
       "fullname": nameController.text,
-      "email":emailController.text,
-      "nic":nicController.text,
-      "mobile":phoneNoControlller.text,
-      "uid":auth.currentUser!.uid
+      "email": emailController.text,
+      "nic": nicController.text,
+      "mobile": phoneNoControlller.text,
+      //     "uid": auth.currentUser!.uid
     };
 
-   return users.add(newUserData).then((DocumentReference documentReference) => {
-      print("doc id = ${documentReference.id}")
-    });
+    final walletInfo = <String, dynamic>{
+      "name": "Default Wallet",
+      "mobile": phoneNoControlller.text,
+      "currency": "LKR",
+    };
+
+    return users.doc(auth.currentUser?.uid).set(newUserData).then((result) => {
+          users.doc(auth.currentUser?.uid).collection('wallet').add(walletInfo)
+        });
   }
 
   Widget nameInput() {
     return Padding(
-      padding:  const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
       child: TextFormField(
         controller: nameController,
         decoration: InputDecoration(
@@ -265,7 +311,7 @@ class _RegisterPageState extends State<RegisterPage> {
       child: TextFormField(
         controller: nicController,
         validator: nicValidator,
-      //  onChanged: nicValidator,
+        //  onChanged: nicValidator,
         decoration: InputDecoration(
             label: const Text("NIC"),
             counterText: "",
@@ -318,6 +364,4 @@ class _RegisterPageState extends State<RegisterPage> {
       return "";
     }
   }
-
-
 }
