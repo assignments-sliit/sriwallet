@@ -113,9 +113,23 @@ class _HomePageState extends State<HomePage> {
             decoration: BoxDecoration(
                 color: Colors.blue, borderRadius: BorderRadius.circular(20)),
             child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, 
+                  children: [
+                    Text(
+                "Card Name",
+                style: TextStyle(color: Colors.grey[200]),
+              ),
               SizedBox(
-                height: 10,
+                height: 5,
+              ),
+              Text("Random Card",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      )),
+              SizedBox(
+                height: 30,
               ),
               Text(
                 "Card Number",
