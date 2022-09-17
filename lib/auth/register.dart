@@ -31,6 +31,9 @@ class _RegisterPageState extends State<RegisterPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   FirebaseFirestore db = FirebaseFirestore.instance;
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+
 
   String phoneNumber = "";
   String verificationIdReceived = "";
@@ -92,17 +95,6 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  void loginWithMobileNo(BuildContext context) async {
-    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
-        verificationId: verificationIdReceived, smsCode: codeController.text);
-
-    await auth.signInWithCredential(phoneAuthCredential).then((value) => {
-          {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const HomePage()))
-          }
-        });
-  }
 
   Widget registerWithPhoneNoText() {
     return Row(
@@ -220,7 +212,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   verifyMobile();
                 } else {
                   if(_registerPageKey.currentState!.validate()){
+                    
                     loginWithMobileNo(context);
+                   
+
                   }
                   
                 }
@@ -230,15 +225,30 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  createUser(){
-    final newUserData = <String,String>{
+  void loginWithMobileNo(BuildContext context) async {
+    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+        verificationId: verificationIdReceived, smsCode: codeController.text);
+
+    await auth.signInWithCredential(phoneAuthCredential).then((value) => {
+          {
+            print(value),
+             createUser(),
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const HomePage()))
+          }
+        });
+  }
+  Future<void> createUser(){
+    final newUserData = <String,dynamic>{
       "fullname": nameController.text,
       "email":emailController.text,
-
+      "nic":nicController.text,
+      "mobile":phoneNoControlller.text,
+      "uid":auth.currentUser!.uid
     };
 
-    db.collection("users").add(newUserData).then((DocumentReference doc) => {
-      print(doc.id)
+   return users.add(newUserData).then((DocumentReference documentReference) => {
+      print("doc id = ${documentReference.id}")
     });
   }
 

@@ -38,6 +38,7 @@ dependencies:
   google_sign_in: ^5.4.1
   firebase_core: ^1.21.1
   cloud_firestore: ^3.4.8
+  progress_dialog_null_safe: ^1.0.7
 
 dev_dependencies:
   flutter_test:
