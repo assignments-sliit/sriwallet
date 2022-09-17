@@ -117,14 +117,9 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 10,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Card Number",
-                    style: TextStyle(color: Colors.grey[200]),
-                  ),
-                ],
+              Text(
+                "Card Number",
+                style: TextStyle(color: Colors.grey[200]),
               ),
               SizedBox(
                 height: 5,
