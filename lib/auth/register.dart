@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:sriwallet/auth/login.dart';
 import 'package:sriwallet/ui/home/homepage.dart';
@@ -40,7 +36,6 @@ class _RegisterPageState extends State<RegisterPage> {
   String dialogMessage = "";
 
   late ProgressDialog progressDialog;
- 
 
   @override
   Widget build(BuildContext context) {
@@ -66,28 +61,25 @@ class _RegisterPageState extends State<RegisterPage> {
       body: SingleChildScrollView(
         child: Form(
           key: _registerPageKey,
-          child: Column(
-              //  mainAxisAlignment: MainAxisAlignment.center,
+          child: Column(children: [
+            Form(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-              //  ToggleButtons(children: children, isSelected: isSelected),
-
-                Form(
-                    child: Column(
-                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    
-                        registerWithPhoneNoText(),
-                        nameInput(),
-                        nicInput(),
-                        emailInput(),
-                        phoneNumberInput(),
-                        otpInput(),
-                        masterButton(),
-                    const SizedBox(height: 100,),
-                    goAndLogin()
-                  ],
-                )),
-              ]),
+                registerWithPhoneNoText(),
+                nameInput(),
+                nicInput(),
+                emailInput(),
+                phoneNumberInput(),
+                otpInput(),
+                masterButton(),
+                const SizedBox(
+                  height: 100,
+                ),
+                goAndLogin()
+              ],
+            )),
+          ]),
         ),
       ),
     );
@@ -174,14 +166,12 @@ class _RegisterPageState extends State<RegisterPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
-              //    height: MediaQuery.of(context).size.width / 4,
               child: Padding(
                 padding: const EdgeInsets.only(
                     left: 10, right: 10, bottom: 10, top: 10),
                 child: TextFormField(
                   onChanged: (value) {
                     if (value.length == 6) {
-                      //   FocusScope.of(context).nextFocus();
                       setState(() {
                         isOtpFilled = true;
                       });
@@ -225,7 +215,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   verifyMobile();
                 } else {
                   if (_registerPageKey.currentState!.validate()) {
-                    
                     loginWithMobileNo(context);
                   }
                 }
@@ -235,19 +224,18 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-    Widget goAndLogin() {
+  Widget goAndLogin() {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 10),
-      child: ElevatedButton(  
+      child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: Colors.lightBlue[500],
           minimumSize: const Size.fromHeight(50),
         ),
         onPressed: () {
-                Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()));
-              },
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const LoginPage()));
+        },
         child: const Text("LOGIN"),
       ),
     );
