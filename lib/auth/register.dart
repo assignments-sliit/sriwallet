@@ -63,14 +63,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     otpInput(),
                     masterButton(),
                     
-        
-                    // const Text("OR"),
-                    // const Divider(),
-                    // const Text("Verify with GOOGLE"),
-                    // ElevatedButton.icon(
-                    //     onPressed: () {},
-                    //     icon: const FaIcon(FontAwesomeIcons.google),
-                    //     label: const Text("SIGN UP WITH GOOGLE")),
                   ],
                 )),
               ]),
