@@ -27,9 +27,9 @@ class CardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
-        width: 300,
+        width: 350,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
             color: backgroundColor, borderRadius: BorderRadius.circular(20)),
@@ -46,7 +46,7 @@ class CardItem extends StatelessWidget {
                       style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 20)),
+                          fontSize: 14)),
                 ],
               ),
             ],
@@ -84,7 +84,7 @@ class CardItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(holderName,
+              Text(holderName.toUpperCase(),
                   style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -92,7 +92,7 @@ class CardItem extends StatelessWidget {
               FaIcon(
                 getCardIcon(types),
                 color: Colors.white,
-                size: 40,
+                size: 36,
               ),
             ],
           )

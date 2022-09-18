@@ -3,10 +3,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:sriwallet/auth/login.dart';
 import 'package:sriwallet/auth/register.dart';
+import 'package:sriwallet/auth/utils/card_number_formattor.dart';
 import 'package:sriwallet/cards/card.dart';
 import 'package:sriwallet/cards/card_types.dart';
 import 'package:sriwallet/cards/no_card.dart';
@@ -41,7 +43,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -70,19 +72,61 @@ class _HomePageState extends State<HomePage> {
                       ),
                       onPressed: () {
                         showModalBottomSheet<void>(
-                            isDismissible: false,
+                         //   isDismissible: false,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                             context: context,
                             builder: (BuildContext context) {
                               return Container(
-                                height: 300,
                                 child: Center(
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
+                                    /// mainAxisAlignment: MainAxisAlignment.center,
+                                    // mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      const Text('Modal BottomSheet'),
+                                      Form(
+                                          child: Column(
+                                        children: [
+                                          Text("Add Card"),
+                                          Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: TextFormField(
+                                              textAlign: TextAlign.center,
+                                              maxLength: 19,
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .digitsOnly,
+                                                LengthLimitingTextInputFormatter(
+                                                    17),
+                                                CardNumberInputFormatter()
+                                              ],
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              decoration: InputDecoration(
+                                                counterText: "",
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5)),
+                                                  label: Text("Card Number")),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: TextFormField(
+                                              textAlign: TextAlign.center,
+                                              decoration: InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5)),
+                                                  label:
+                                                      Text("Cardholder Name")),
+                                            ),
+                                          ),
+
+                                        ],
+                                      )),
+                                      
                                       ElevatedButton(
                                         child: const Text('Close BottomSheet'),
                                         onPressed: () => Navigator.pop(context),
@@ -118,7 +162,7 @@ class _HomePageState extends State<HomePage> {
         builder: ((context, snapshot) {
           return Container(
             height: 250,
-            child: snapshot.data!.size < 1
+            child: snapshot.data == null
                 ? NoCard()
                 : PageView.builder(
                     controller: _controller,
@@ -149,7 +193,6 @@ class _HomePageState extends State<HomePage> {
     return Container(
       height: 200,
       child: CardItem(
-       
         types: snapshot!["type"],
         cardNumber: snapshot["cardNumber"],
         expMonth: snapshot["expMonth"],
