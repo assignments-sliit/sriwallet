@@ -274,7 +274,7 @@ class _RegisterPageState extends State<RegisterPage> {
     };
 
     return users.doc(auth.currentUser?.uid).set(newUserData).then((result) => {
-          users.doc(auth.currentUser?.uid).collection('wallet').add(walletInfo)
+          users.doc(auth.currentUser?.uid).collection('wallet').doc(phoneNumber).set(walletInfo)
         });
   }
 

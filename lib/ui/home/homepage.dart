@@ -4,8 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:sriwallet/auth/login.dart';
 import 'package:sriwallet/auth/register.dart';
+import 'package:sriwallet/cards/card.dart';
+import 'package:sriwallet/cards/card_types.dart';
+import 'package:sriwallet/cards/no_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,60 +26,23 @@ class _HomePageState extends State<HomePage> {
 
   String? displayName = "";
 
+  final _controller = PageController();
+
   @override
   void initState() {
-    getUserData();
+    
     super.initState();
-  }
-
-  getUserData() async {
-    final userRef =
-        db.collection('users').where("uid", isEqualTo: auth.currentUser?.uid);
-
-    Map userdata;
-    String? name;
-    await userRef.get().then((value) => {
-          userdata = value.docs.first.data(),
-          name = userdata["fullname"].toString().split(" ")[0]
-        });
-
-    setState(() {
-      displayName = name;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // return WillPopScope(
-    //   onWillPop: (() async {
-    //     return false;
-    //   }),
-    //   child: Scaffold(
-    //     backgroundColor: Colors.grey[300],
-    //     appBar: AppBar(
-    //         automaticallyImplyLeading: false,
-    //         title: Text("Welcome $displayName !")),
-    //     body: Center(
-    //       child: ElevatedButton(
-    //           onPressed: () {
-    //             auth.signOut().then((value) => {
-    //                   Navigator.pushReplacement(
-    //                       context,
-    //                       MaterialPageRoute(
-    //                           builder: (context) => const LoginPage()))
-    //                 });
-    //           },
-    //           child: const Text("SIGN OUT")),
-    //     ),
-    //   ),
-    // );
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.white,
       body: SafeArea(
           child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -94,12 +61,38 @@ class _HomePageState extends State<HomePage> {
                 ),
                 //add cards button
                 Container(
-                    padding: EdgeInsets.all(8),
+                    //padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
                         color: Colors.grey[350], shape: BoxShape.circle),
-                    child: const Icon(
-                      Icons.add_card_rounded,
-                      size: 28,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.add_card_rounded,
+                        size: 28,
+                      ),
+                      onPressed: () {
+                        showModalBottomSheet<void>(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                height: 300,
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      const Text('Modal BottomSheet'),
+                                      ElevatedButton(
+                                        child: const Text('Close BottomSheet'),
+                                        onPressed: () => Navigator.pop(context),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      },
                     ))
               ],
             ),
@@ -107,71 +100,63 @@ class _HomePageState extends State<HomePage> {
           SizedBox(
             height: 25,
           ),
-          Container(
-            width: 300,
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-                color: Colors.blue, borderRadius: BorderRadius.circular(20)),
-            child:
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, 
-                  children: [
-                    Text(
-                "Card Name",
-                style: TextStyle(color: Colors.grey[200]),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Text("Random Card",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      )),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                "Card Number",
-                style: TextStyle(color: Colors.grey[200]),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Text("**** 8543",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24)),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Expiry Date",
-                        style: TextStyle(color: Colors.grey[200]),
-                      ),
-                      SizedBox(height: 5),
-                      Text('10/24',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold))
-                    ],
-                  ),
-                  FaIcon(
-                    FontAwesomeIcons.ccVisa,
-                    color: Colors.white,
-                  )
-                ],
-              )
-            ]),
-          )
+          buildCardSlider(context)
         ],
       )),
+    );
+  }
+
+  Widget buildCardSlider(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: db
+            .collection('users')
+            .doc(auth.currentUser?.uid)
+            .collection('wallet')
+            .doc(auth.currentUser?.phoneNumber)
+            .collection('cards')
+            .snapshots(),
+        builder: ((context, snapshot) {
+          return Container(
+            height: 200,
+            child: snapshot.data!.size < 1
+                ? NoCard()
+                : PageView.builder(
+                    controller: _controller,
+                    itemCount:
+                        snapshot.hasData ? snapshot.data?.docs.length : 0,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        
+                        children: <Widget>[
+                        buildCardItem(context, snapshot.data?.docs[index]),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15.0),
+                          child: SmoothPageIndicator(
+                              effect: ExpandingDotsEffect(
+                                  activeDotColor: Colors.grey.shade800,
+                                  radius: 10,
+                                  dotHeight: 10,
+                                  dotWidth: 10),
+                              controller: _controller,
+                              count: snapshot.data!.size),
+                        )
+                      ]);
+                    },
+                  ),
+          );
+        }));
+  }
+
+  Widget buildCardItem(BuildContext context, QueryDocumentSnapshot? snapshot) {
+    return Container(
+      height: 175,
+      child: CardItem(
+          cardname: snapshot!["cardname"],
+          types: snapshot["type"],
+          cardNumber: snapshot["cardNumber"],
+          expMonth: snapshot["expMonth"],
+          expYear: snapshot["expYear"],
+          backgroundColor: Colors.blue),
     );
   }
 }
