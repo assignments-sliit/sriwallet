@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'SRI WALLET',
       theme: ThemeData(
-
+        useMaterial3: true,
         // is not restarted.
         primarySwatch: Colors.blue,
       ),

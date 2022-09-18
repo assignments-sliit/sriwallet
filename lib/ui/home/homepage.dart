@@ -71,69 +71,128 @@ class _HomePageState extends State<HomePage> {
                         size: 28,
                       ),
                       onPressed: () {
-                        showModalBottomSheet<void>(
-                         //   isDismissible: false,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
+                        showDialog<void>(
                             context: context,
                             builder: (BuildContext context) {
-                              return Container(
-                                child: Center(
-                                  child: Column(
-                                    /// mainAxisAlignment: MainAxisAlignment.center,
-                                    // mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Form(
-                                          child: Column(
-                                        children: [
-                                          Text("Add Card"),
-                                          Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: TextFormField(
-                                              textAlign: TextAlign.center,
-                                              maxLength: 19,
-                                              inputFormatters: [
-                                                FilteringTextInputFormatter
-                                                    .digitsOnly,
-                                                LengthLimitingTextInputFormatter(
-                                                    17),
-                                                CardNumberInputFormatter()
-                                              ],
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              decoration: InputDecoration(
+                              return AlertDialog(
+                                title: Text("New Card"),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Form(
+                                        child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: TextFormField(
+                                            maxLength: 19,
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly,
+                                              LengthLimitingTextInputFormatter(
+                                                  17),
+                                              CardNumberInputFormatter()
+                                            ],
+                                            keyboardType: TextInputType.number,
+                                            decoration: InputDecoration(
+                                                hintText: 'xxxx xxxx xxxx xxxx',
                                                 counterText: "",
-                                                  border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5)),
-                                                  label: Text("Card Number")),
-                                            ),
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5)),
+                                                label: Text("Card Number")),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: TextFormField(
-                                              textAlign: TextAlign.center,
-                                              decoration: InputDecoration(
-                                                  border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5)),
-                                                  label:
-                                                      Text("Cardholder Name")),
-                                            ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: TextFormField(
+                                            decoration: InputDecoration(
+                                                hintText: 'polroti',
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5)),
+                                                label: Text("Cardholder Name")),
                                           ),
-
-                                        ],
-                                      )),
-                                      
-                                      ElevatedButton(
-                                        child: const Text('Close BottomSheet'),
-                                        onPressed: () => Navigator.pop(context),
-                                      ),
-                                    ],
-                                  ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: TextFormField(
+                                            decoration: InputDecoration(
+                                                hintText: 'Commercial bank',
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5)),
+                                                label: Text("Bank")),
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child: TextFormField(
+                                                  maxLength: 5,
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  decoration: InputDecoration(
+                                                    counterText: "",
+                                                      hintText: 'MM/YY',
+                                                      border:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5)),
+                                                      label: Text("MM/YY")),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child: TextFormField(
+                                                  decoration: InputDecoration(
+                                                      hintText: '***',
+                                                      border:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5)),
+                                                      label: Text("CVV")),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    )),
+                                  ],
                                 ),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text("Cancel")),
+                                  TextButton(
+                                    
+                                      onPressed: () {
+                                        // db
+                                        //     .collection('users')
+                                        //     .doc(auth.currentUser?.uid)
+                                        //     .collection('wallet')
+                                        //     .doc(auth.currentUser?.phoneNumber)
+                                        //     .collection('cards').doc().set("data")
+                                      },
+                                      child: Text("Save card"))
+                                ],
                               );
                             });
                       },
