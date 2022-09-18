@@ -30,7 +30,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    
     super.initState();
   }
 
@@ -71,6 +70,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       onPressed: () {
                         showModalBottomSheet<void>(
+                            isDismissible: false,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                             context: context,
@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
             .snapshots(),
         builder: ((context, snapshot) {
           return Container(
-            height: 200,
+            height: 250,
             child: snapshot.data!.size < 1
                 ? NoCard()
                 : PageView.builder(
@@ -125,9 +125,7 @@ class _HomePageState extends State<HomePage> {
                     itemCount:
                         snapshot.hasData ? snapshot.data?.docs.length : 0,
                     itemBuilder: (context, index) {
-                      return Column(
-                        
-                        children: <Widget>[
+                      return Column(children: <Widget>[
                         buildCardItem(context, snapshot.data?.docs[index]),
                         Padding(
                           padding: const EdgeInsets.only(top: 15.0),
@@ -149,14 +147,17 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildCardItem(BuildContext context, QueryDocumentSnapshot? snapshot) {
     return Container(
-      height: 175,
+      height: 200,
       child: CardItem(
-          cardname: snapshot!["cardname"],
-          types: snapshot["type"],
-          cardNumber: snapshot["cardNumber"],
-          expMonth: snapshot["expMonth"],
-          expYear: snapshot["expYear"],
-          backgroundColor: Colors.blue),
+       
+        types: snapshot!["type"],
+        cardNumber: snapshot["cardNumber"],
+        expMonth: snapshot["expMonth"],
+        expYear: snapshot["expYear"],
+        backgroundColor: Colors.blue,
+        bankName: snapshot["bankName"],
+        holderName: snapshot["holderName"],
+      ),
     );
   }
 }

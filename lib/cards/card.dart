@@ -3,20 +3,25 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sriwallet/cards/card_types.dart';
 
 class CardItem extends StatelessWidget {
-  final String cardname;
+
   final String types;
   final String? cardNumber;
   final int expMonth;
   final int expYear;
   final Color backgroundColor;
+  final String bankName;
+  final String holderName;
 
   const CardItem(
       {Key? key,
-      required this.cardname,
+
       required this.types,
       required this.cardNumber,
       required this.expMonth,
-      required this.expYear, required this.backgroundColor})
+      required this.expYear,
+      required this.backgroundColor,
+      required this.bankName,
+      required this.holderName})
       : super(key: key);
 
   @override
@@ -36,24 +41,13 @@ class CardItem extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Card Name",
-                    style: TextStyle(color: Colors.grey[200]),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                   Text(cardname,
-                      style:const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      )),
+            
+                  Text(bankName,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20)),
                 ],
-              ),
-               FaIcon(
-                getCardIcon(types),
-                color: Colors.white,
-                size: 32,
               ),
             ],
           ),
@@ -68,14 +62,16 @@ class CardItem extends StatelessWidget {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children:  [
+                children: [
                   Text(cardNumber!,
                       style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 24)),
+                          const SizedBox(height: 7,),
                   Text('$expMonth/$expYear',
                       style: const TextStyle(
+                        
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 16)),
@@ -84,6 +80,22 @@ class CardItem extends StatelessWidget {
               //  Chip(label: Text("Default"),backgroundColor: Colors.white,)
             ],
           ),
+         const SizedBox(height: 10,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(holderName,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16)),
+              FaIcon(
+                getCardIcon(types),
+                color: Colors.white,
+                size: 40,
+              ),
+            ],
+          )
         ]),
       ),
     );
