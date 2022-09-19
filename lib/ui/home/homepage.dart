@@ -8,7 +8,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:sriwallet/auth/login.dart';
 import 'package:sriwallet/auth/register.dart';
-import 'package:sriwallet/auth/utils/card_number_formattor.dart';
+import 'package:sriwallet/cards/add_card.dart';
+import 'package:sriwallet/cards/card_exp_formattor.dart';
+import 'package:sriwallet/cards/card_number_formattor.dart';
 import 'package:sriwallet/cards/card.dart';
 import 'package:sriwallet/cards/card_types.dart';
 import 'package:sriwallet/cards/no_card.dart';
@@ -24,7 +26,9 @@ class _HomePageState extends State<HomePage> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   FirebaseFirestore db = FirebaseFirestore.instance;
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  //CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+
 
   String? displayName = "";
 
@@ -50,14 +54,11 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   children: const [
                     Text(
-                      "My ",
+                      "My Cards",
                       style:
                           TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                     ),
-                    Text(
-                      "Cards",
-                      style: TextStyle(fontSize: 28),
-                    ),
+                   
                   ],
                 ),
                 //add cards button
@@ -71,130 +72,9 @@ class _HomePageState extends State<HomePage> {
                         size: 28,
                       ),
                       onPressed: () {
-                        showDialog<void>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text("New Card"),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Form(
-                                        child: Column(
-                                      children: [
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: TextFormField(
-                                            maxLength: 19,
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter
-                                                  .digitsOnly,
-                                              LengthLimitingTextInputFormatter(
-                                                  17),
-                                              CardNumberInputFormatter()
-                                            ],
-                                            keyboardType: TextInputType.number,
-                                            decoration: InputDecoration(
-                                                hintText: 'xxxx xxxx xxxx xxxx',
-                                                counterText: "",
-                                                border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5)),
-                                                label: Text("Card Number")),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: TextFormField(
-                                            decoration: InputDecoration(
-                                                hintText: 'polroti',
-                                                border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5)),
-                                                label: Text("Cardholder Name")),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: TextFormField(
-                                            decoration: InputDecoration(
-                                                hintText: 'Commercial bank',
-                                                border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5)),
-                                                label: Text("Bank")),
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(5.0),
-                                                child: TextFormField(
-                                                  maxLength: 5,
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  decoration: InputDecoration(
-                                                    counterText: "",
-                                                      hintText: 'MM/YY',
-                                                      border:
-                                                          OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5)),
-                                                      label: Text("MM/YY")),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(5.0),
-                                                child: TextFormField(
-                                                  decoration: InputDecoration(
-                                                      hintText: '***',
-                                                      border:
-                                                          OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5)),
-                                                      label: Text("CVV")),
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    )),
-                                  ],
-                                ),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: Text("Cancel")),
-                                  TextButton(
-                                    
-                                      onPressed: () {
-                                        // db
-                                        //     .collection('users')
-                                        //     .doc(auth.currentUser?.uid)
-                                        //     .collection('wallet')
-                                        //     .doc(auth.currentUser?.phoneNumber)
-                                        //     .collection('cards').doc().set("data")
-                                      },
-                                      child: Text("Save card"))
-                                ],
-                              );
-                            });
+                        Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AddCardPage()));
                       },
                     ))
               ],
@@ -253,9 +133,9 @@ class _HomePageState extends State<HomePage> {
       height: 200,
       child: CardItem(
         types: snapshot!["type"],
-        cardNumber: snapshot["cardNumber"],
-        expMonth: snapshot["expMonth"],
-        expYear: snapshot["expYear"],
+        cardNumber: snapshot["cardNumber"].toString(),
+        expMonth: snapshot["expMonth"].toString(),
+        expYear: snapshot["expYear"].toString(),
         backgroundColor: Colors.blue,
         bankName: snapshot["bankName"],
         holderName: snapshot["holderName"],

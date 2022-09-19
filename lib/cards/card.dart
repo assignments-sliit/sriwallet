@@ -6,8 +6,8 @@ class CardItem extends StatelessWidget {
 
   final String types;
   final String? cardNumber;
-  final int expMonth;
-  final int expYear;
+  final String expMonth;
+  final String expYear;
   final Color backgroundColor;
   final String bankName;
   final String holderName;
@@ -90,7 +90,7 @@ class CardItem extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: 16)),
               FaIcon(
-                getCardIcon(types),
+                getCardIconString(types),
                 color: Colors.white,
                 size: 36,
               ),

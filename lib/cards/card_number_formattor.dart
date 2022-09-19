@@ -13,7 +13,7 @@ var buffer = StringBuffer();
       buffer.write(text[i]);
       var nonZeroIndex = i + 1;
       if (nonZeroIndex % 4 == 0 && nonZeroIndex != text.length) {
-        buffer.write(' '); // Add double spaces.
+        buffer.write('  '); // Add double spaces.
       }
     }
 var string = buffer.toString();
