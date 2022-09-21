@@ -3,8 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
+import 'package:sriwallet/auth/functions/create_user.dart';
+import 'package:sriwallet/auth/functions/validators.dart';
 import 'package:sriwallet/auth/login.dart';
 import 'package:sriwallet/ui/home/homepage.dart';
+import 'package:sriwallet/utils/input/name_input.dart';
+import 'package:sriwallet/utils/labels/register_labels.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -67,7 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 registerWithPhoneNoText(),
-                nameInput(),
+                nameInput(nameController,context),
                 nicInput(),
                 emailInput(),
                 phoneNumberInput(),
@@ -98,23 +102,6 @@ class _RegisterPageState extends State<RegisterPage> {
         });
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
-    );
-  }
-
-  Widget registerWithPhoneNoText() {
-    return Row(
-      children: const [
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(top: 20, bottom: 20),
-            child: Text(
-              "Register with your phone number",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
-        ),
-      ],
     );
   }
 
@@ -249,7 +236,12 @@ class _RegisterPageState extends State<RegisterPage> {
     await auth.signInWithCredential(phoneAuthCredential).then((value) => {
           {
             dialogMessage = "Creating user...",
-            createUser(),
+            createUserAndWallet(
+              nameController.text,
+              emailController.text,
+              nicController.text,
+              phoneNoControlller.text,
+            ),
             dialogMessage = "Logging in...",
             progressDialog.hide().then((value) => Navigator.pushReplacement(
                 context,
@@ -258,40 +250,7 @@ class _RegisterPageState extends State<RegisterPage> {
         });
   }
 
-  Future<void> createUser() {
-    final newUserData = <String, dynamic>{
-      "fullname": nameController.text,
-      "email": emailController.text,
-      "nic": nicController.text,
-      "mobile": phoneNoControlller.text,
-      //     "uid": auth.currentUser!.uid
-    };
 
-    final walletInfo = <String, dynamic>{
-      "name": "Default Wallet",
-      "mobile": phoneNoControlller.text,
-      "currency": "LKR",
-    };
-
-    return users.doc(auth.currentUser?.uid).set(newUserData).then((result) => {
-          users.doc(auth.currentUser?.uid).collection('wallet').doc(phoneNumber).set(walletInfo)
-        });
-  }
-
-  Widget nameInput() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
-      child: TextFormField(
-        controller: nameController,
-        decoration: InputDecoration(
-            label: const Text("Full Name"),
-            counterText: "",
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: BorderSide(color: Theme.of(context).primaryColor))),
-      ),
-    );
-  }
 
   Widget nicInput() {
     return Padding(
@@ -327,29 +286,5 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  String nicValidator(String? input) {
-    String pattern = r'^([0-9]{9}[x|X|v|V]|[0-9]{12})$)';
-    //regexp obtained from https://www.regextester.com/100137
-    RegExp exp = RegExp(pattern);
 
-    if (exp.hasMatch(input!)) {
-      print(exp.hasMatch(input));
-      return "";
-    } else {
-      return "INVALID NIC";
-    }
-
-    // return exp.hasMatch(input!);
-  }
-
-  String emailValidator(String? input) {
-    String pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = RegExp(pattern);
-    if (!regex.hasMatch(input!)) {
-      return "INVALID EMAIL";
-    } else {
-      return "";
-    }
-  }
 }
