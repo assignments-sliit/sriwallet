@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:sriwallet/auth/screens/register.dart';
 import 'package:sriwallet/home/screens/homepage.dart';
@@ -57,25 +53,29 @@ class _LoginPageState extends State<LoginPage> {
             color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login"),
+        appBar: AppBar(
+        
+        backgroundColor: Theme.of(context).primaryColor,
+        title: const Text(
+
+          "Login",
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: SingleChildScrollView(
         child: Form(
           key: _registerPageKey,
           child: Column(
-              //  mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //  ToggleButtons(children: children, isSelected: isSelected),
 
+              children: [
                 Form(
                     child: Column(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
+                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     phoneNumberInput(),
                     otpInput(),
                     masterButton(),
-                    const SizedBox(height: 100,),
+                    const SizedBox(height: 370,),
                     register()
                   ],
                 )),
@@ -191,6 +191,7 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+          primary: Colors.lightBlue[500],
           minimumSize: const Size.fromHeight(50),
         ),
         onPressed: !phoneNumberFilled
@@ -204,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 }
               },
-        child: Text(!verificationSent ? "Send OTP" : "LOGIN"),
+        child: Text(!verificationSent ? "Send OTP" : "LOGIN", style:const TextStyle(color: Colors.white)),
       ),
     );
   }
@@ -213,7 +214,7 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.only(left: 20, right: 10),
       child: ElevatedButton(  
         style: ElevatedButton.styleFrom(
-          primary: Colors.lightBlue[500],
+         
           minimumSize: const Size.fromHeight(50),
         ),
         onPressed: () {
@@ -221,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
                 context,
                 MaterialPageRoute(builder: (context) => const RegisterPage()));
               },
-        child: const Text("REGISTER"),
+        child: const Text("REGISTER",style: TextStyle(color: Colors.blue)),
       ),
     );
   }

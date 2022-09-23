@@ -5,7 +5,7 @@ Widget registerWithPhoneNoText() {
       children: const [
         Expanded(
           child: Padding(
-            padding: EdgeInsets.only(top: 20, bottom: 20),
+            padding: EdgeInsets.only(top: 10, bottom: 5),
             child: Text(
               "Register with your phone number",
               textAlign: TextAlign.center,

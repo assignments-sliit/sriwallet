@@ -19,7 +19,15 @@ FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Receive Money")),
+      appBar: AppBar( iconTheme: const IconThemeData(color: Colors.white),
+        
+        backgroundColor: Theme.of(context).primaryColor,
+        title: const Text(
+
+          "Receive Money",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
       body: Center(
           child: QrImage(
         data: auth.currentUser == null ? 'NOPE' : auth.currentUser!.uid,

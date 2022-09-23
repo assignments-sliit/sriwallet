@@ -61,7 +61,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Register"),
+        
+        backgroundColor: Theme.of(context).primaryColor,
+        title: const Text(
+
+          "Register",
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -72,14 +78,23 @@ class _RegisterPageState extends State<RegisterPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 registerWithPhoneNoText(),
-                nameInput(nameController,context),
+                nameInput(nameController, context),
                 nicInput(),
                 emailInput(),
                 phoneNumberInput(),
                 otpInput(),
                 masterButton(),
                 const SizedBox(
-                  height: 100,
+                  height: 120,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("Already have an account?"),
+                    ),
+                  ],
                 ),
                 goAndLogin()
               ],
@@ -191,7 +206,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget masterButton() {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           minimumSize: const Size.fromHeight(50),
@@ -214,7 +229,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget goAndLogin() {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: Colors.lightBlue[500],
@@ -224,7 +239,7 @@ class _RegisterPageState extends State<RegisterPage> {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const LoginPage()));
         },
-        child: const Text("LOGIN"),
+        child: const Text("LOGIN", style: TextStyle(color: Colors.white),),
       ),
     );
   }
@@ -250,8 +265,6 @@ class _RegisterPageState extends State<RegisterPage> {
           }
         });
   }
-
-
 
   Widget nicInput() {
     return Padding(
@@ -286,6 +299,4 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-
-
 }

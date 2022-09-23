@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sriwallet/cards/add_card_cam.dart';
 import 'package:sriwallet/cards/card_exp_formattor.dart';
 import 'package:sriwallet/cards/card_input_icon.dart';
 import 'package:sriwallet/cards/card_number_formattor.dart';
@@ -35,58 +34,25 @@ class _AddCardPageState extends State<AddCardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Theme.of(context).primaryColor,
+        title: const Text(
+
+          "Add a card",
+          style: TextStyle(color: Colors.blue),
+        ),
+      ),
         body: SafeArea(
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                        //padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                            color: Colors.grey[350], shape: BoxShape.circle),
-                        child: IconButton(
-                          icon: Icon(Icons.arrow_back_rounded),
-                          onPressed: () {
-                            goBack(context);
-                          },
-                        )),
-                    SizedBox(
-                      width: 20,
-                    ),
-                   
-                    const Text(
-                      "Add Card",
-                      style: TextStyle(fontSize: 28),
-                    ),
-
-                    
-                  ],
-                ),
-                //add cards button
-                //  IconButton(
-                //       icon: const FaIcon(FontAwesomeIcons.camera),
-                //       onPressed: () {
-                //         Navigator.push(
-                // context,
-                // MaterialPageRoute(builder: (context) => const AddNfcCardPage()));
-                //       },
-                //     )
-              ],
-            ),
-          ),
+          
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: TextFormField(
               maxLength: 22,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                // LengthLimitingTextInputFormatter(17),
                 CardNumberInputFormatter()
               ],
               controller: cardNumberController,
