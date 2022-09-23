@@ -16,6 +16,8 @@ import 'package:sriwallet/cards/card.dart';
 import 'package:sriwallet/cards/card_types.dart';
 import 'package:sriwallet/cards/no_card.dart';
 import 'package:sriwallet/cards/view_card.dart';
+import 'package:sriwallet/money/screens/receive_money.dart';
+import 'package:sriwallet/money/screens/send_moeny.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -29,8 +31,6 @@ class _HomePageState extends State<HomePage> {
 
   FirebaseFirestore db = FirebaseFirestore.instance;
   //CollectionReference users = FirebaseFirestore.instance.collection('users');
-
-
 
   String? displayName = "";
 
@@ -51,16 +51,27 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Row(
+              children: const [
+                Text(
+                  "My Balance",
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: const [
                     Text(
                       "My Cards",
-                      style:
-                          TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 28,
+                      ),
                     ),
-                   
                   ],
                 ),
                 //add cards button
@@ -75,8 +86,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                       onPressed: () {
                         Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AddCardPage()));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AddCardPage()));
                       },
                     ))
               ],
@@ -85,7 +97,67 @@ class _HomePageState extends State<HomePage> {
           SizedBox(
             height: 25,
           ),
-          buildCardSlider(context)
+          buildCardSlider(context),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                  onTap: (){
+                  Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ReceiveMoneyPage()));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black, width: 2),
+                        borderRadius: BorderRadius.circular(10)),
+                    height: 100,
+                    width: MediaQuery.of(context).size.width * 0.45,
+                    //color: Colors.blue,
+                    child: Center(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.file_download_outlined),
+                        Text("Receive Money")
+                      ],
+                    )),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SendMoneyPage()));
+                },
+
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black, width: 2),
+                        borderRadius: BorderRadius.circular(10)),
+                    height: 100,
+                    width: MediaQuery.of(context).size.width * 0.45,
+                    child: Center(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.file_upload_outlined),
+                        Text("Send Money")
+                      ],
+                    )),
+                    // color: Colors.amber,
+                  ),
+                ),
+              )
+            ],
+          )
         ],
       )),
     );
@@ -101,16 +173,16 @@ class _HomePageState extends State<HomePage> {
             .collection('cards')
             .snapshots(),
         builder: ((context, snapshot) {
-         
           return GestureDetector(
-            onTap: (){
+            onTap: () {
               Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const ViewCardPage()));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ViewCardPage()));
             },
             child: Container(
               height: 250,
-              child: snapshot.data == null
+              child: snapshot.data != null && snapshot.data!.docs.isEmpty 
                   ? NoCard()
                   : PageView.builder(
                       controller: _controller,
@@ -146,7 +218,9 @@ class _HomePageState extends State<HomePage> {
         cardNumber: snapshot["cardNumber"].toString(),
         expMonth: snapshot["expMonth"].toString(),
         expYear: snapshot["expYear"].toString(),
-        backgroundColor: getCardColor(snapshot["bankName"],),
+        backgroundColor: getCardColor(
+          snapshot["bankName"],
+        ),
         bankName: snapshot["bankName"],
         holderName: snapshot["holderName"],
       ),

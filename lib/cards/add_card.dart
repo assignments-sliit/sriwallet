@@ -69,14 +69,14 @@ class _AddCardPageState extends State<AddCardPage> {
                   ],
                 ),
                 //add cards button
-                 IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.camera),
-                      onPressed: () {
-                        Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AddNfcCardPage()));
-                      },
-                    )
+                //  IconButton(
+                //       icon: const FaIcon(FontAwesomeIcons.camera),
+                //       onPressed: () {
+                //         Navigator.push(
+                // context,
+                // MaterialPageRoute(builder: (context) => const AddNfcCardPage()));
+                //       },
+                //     )
               ],
             ),
           ),
