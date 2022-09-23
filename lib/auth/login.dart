@@ -7,7 +7,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
-import 'package:sriwallet/auth/register.dart';
+import 'package:sriwallet/auth/screens/register.dart';
 import 'package:sriwallet/home/screens/homepage.dart';
 
 

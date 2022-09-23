@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:sriwallet/auth/login.dart';
-import 'package:sriwallet/auth/register.dart';
+import 'package:sriwallet/auth/screens/register.dart';
 import 'package:sriwallet/cards/add_card.dart';
 import 'package:sriwallet/cards/card_color.dart';
 import 'package:sriwallet/cards/card_exp_formattor.dart';

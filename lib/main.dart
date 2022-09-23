@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:sriwallet/auth/register.dart';
+import 'package:sriwallet/auth/screens/register.dart';
 import 'package:sriwallet/home/screens/homepage.dart';
 
 Future<void> main() async{
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'SRI WALLET',
       theme: ThemeData(
-        useMaterial3: true,
+       useMaterial3: true,
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
