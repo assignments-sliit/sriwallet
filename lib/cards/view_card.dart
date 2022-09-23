@@ -2,25 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sriwallet/cards/add_card_cam.dart';
 import 'package:sriwallet/cards/card_exp_formattor.dart';
 import 'package:sriwallet/cards/card_input_icon.dart';
 import 'package:sriwallet/cards/card_number_formattor.dart';
 import 'package:sriwallet/cards/card_types.dart';
+import 'package:sriwallet/home/screens/homepage.dart';
 import 'package:sriwallet/home/utils/go_back.dart';
 
 
-class AddCardPage extends StatefulWidget {
-  const AddCardPage({Key? key}) : super(key: key);
+class ViewCardPage extends StatefulWidget {
+  const ViewCardPage({Key? key}) : super(key: key);
 
   @override
-  State<AddCardPage> createState() => _AddCardPageState();
+  State<ViewCardPage> createState() => _ViewCardPageState();
 }
 
-class _AddCardPageState extends State<AddCardPage> {
+class _ViewCardPageState extends State<ViewCardPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -41,42 +38,38 @@ class _AddCardPageState extends State<AddCardPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
                         //padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
                             color: Colors.grey[350], shape: BoxShape.circle),
                         child: IconButton(
-                          icon: Icon(Icons.arrow_back_rounded),
+                          icon: const Icon(Icons.arrow_back_rounded),
                           onPressed: () {
-                            goBack(context);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const HomePage()));
                           },
                         )),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
-                   
                     const Text(
-                      "Add Card",
+                      "Add ",
+                      style:
+                          TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                    ),
+                    const Text(
+                      "Cards",
                       style: TextStyle(fontSize: 28),
                     ),
-
-                    
                   ],
                 ),
                 //add cards button
-                 IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.camera),
-                      onPressed: () {
-                        Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AddNfcCardPage()));
-                      },
-                    )
               ],
             ),
           ),
@@ -100,7 +93,7 @@ class _AddCardPageState extends State<AddCardPage> {
                   counterText: "",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5)),
-                  label: Text("Card Number")),
+                  label: const Text("Card Number")),
             ),
           ),
           Padding(
@@ -111,7 +104,7 @@ class _AddCardPageState extends State<AddCardPage> {
                   hintText: 'polroti',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5)),
-                  label: Text("Cardholder Name")),
+                  label: const Text("Cardholder Name")),
             ),
           ),
           Padding(
@@ -122,7 +115,7 @@ class _AddCardPageState extends State<AddCardPage> {
                   hintText: 'Commercial bank',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5)),
-                  label: Text("Bank")),
+                  label: const Text("Bank")),
             ),
           ),
           Row(
@@ -144,7 +137,7 @@ class _AddCardPageState extends State<AddCardPage> {
                         hintText: 'MM/YY',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5)),
-                        label: Text("MM/YY")),
+                        label: const Text("MM/YY")),
                   ),
                 ),
               ),
@@ -160,7 +153,7 @@ class _AddCardPageState extends State<AddCardPage> {
                         hintText: '***',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5)),
-                        label: Text("CVV")),
+                        label: const Text("CVV")),
                   ),
                 ),
               ),
@@ -190,16 +183,15 @@ class _AddCardPageState extends State<AddCardPage> {
                     .collection('cards')
                     .path
                     .isEmpty) {
-db
-                    .collection('users')
-                    .doc(auth.currentUser?.uid)
-                    .collection('wallet')
-                    .doc(auth.currentUser?.phoneNumber)
-                    .collection('cards')
-                    .add(newCardInfo)
-                    .then((value) => {goBack(context)});
-
-                    }
+                  db
+                      .collection('users')
+                      .doc(auth.currentUser?.uid)
+                      .collection('wallet')
+                      .doc(auth.currentUser?.phoneNumber)
+                      .collection('cards')
+                      .add(newCardInfo)
+                      .then((value) => {goBack(context)});
+                }
                 db
                     .collection('users')
                     .doc(auth.currentUser?.uid)
@@ -220,7 +212,7 @@ db
 
   void getCardTypeFrmNumber() {
     String input = getCleanedNumber(cardNumberController.text);
-   
+
     CardType type = getCardTypeFromNumber(input);
     if (type != cardType) {
       setState(() {

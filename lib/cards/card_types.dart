@@ -28,6 +28,25 @@ IconData getCardIconString(String cardTypes){
       return FontAwesomeIcons.ccVisa;
      
   }
+}
 
-  //return icon;
+
+
+String getCardTypeString(CardType type){
+    switch (type){
+    case CardType.visa:
+      return 'visa';
+
+    case CardType.amex:
+      return 'amex';
+
+    case CardType.master:
+      return 'master';
+  
+    case CardType.apple:
+      return 'apple';
+    default: 
+      return 'visa';
+     
+  }
 }

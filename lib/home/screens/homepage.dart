@@ -9,11 +9,13 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:sriwallet/auth/login.dart';
 import 'package:sriwallet/auth/register.dart';
 import 'package:sriwallet/cards/add_card.dart';
+import 'package:sriwallet/cards/card_color.dart';
 import 'package:sriwallet/cards/card_exp_formattor.dart';
 import 'package:sriwallet/cards/card_number_formattor.dart';
 import 'package:sriwallet/cards/card.dart';
 import 'package:sriwallet/cards/card_types.dart';
 import 'package:sriwallet/cards/no_card.dart';
+import 'package:sriwallet/cards/view_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -99,31 +101,39 @@ class _HomePageState extends State<HomePage> {
             .collection('cards')
             .snapshots(),
         builder: ((context, snapshot) {
-          return Container(
-            height: 250,
-            child: snapshot.data == null
-                ? NoCard()
-                : PageView.builder(
-                    controller: _controller,
-                    itemCount:
-                        snapshot.hasData ? snapshot.data?.docs.length : 0,
-                    itemBuilder: (context, index) {
-                      return Column(children: <Widget>[
-                        buildCardItem(context, snapshot.data?.docs[index]),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15.0),
-                          child: SmoothPageIndicator(
-                              effect: ExpandingDotsEffect(
-                                  activeDotColor: Colors.grey.shade800,
-                                  radius: 10,
-                                  dotHeight: 10,
-                                  dotWidth: 10),
-                              controller: _controller,
-                              count: snapshot.data!.size),
-                        )
-                      ]);
-                    },
-                  ),
+         
+          return GestureDetector(
+            onTap: (){
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const ViewCardPage()));
+            },
+            child: Container(
+              height: 250,
+              child: snapshot.data == null
+                  ? NoCard()
+                  : PageView.builder(
+                      controller: _controller,
+                      itemCount:
+                          snapshot.hasData ? snapshot.data?.docs.length : 0,
+                      itemBuilder: (context, index) {
+                        return Column(children: <Widget>[
+                          buildCardItem(context, snapshot.data?.docs[index]),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 15.0),
+                            child: SmoothPageIndicator(
+                                effect: ExpandingDotsEffect(
+                                    activeDotColor: Colors.grey.shade800,
+                                    radius: 10,
+                                    dotHeight: 10,
+                                    dotWidth: 10),
+                                controller: _controller,
+                                count: snapshot.data!.size),
+                          )
+                        ]);
+                      },
+                    ),
+            ),
           );
         }));
   }
@@ -136,7 +146,7 @@ class _HomePageState extends State<HomePage> {
         cardNumber: snapshot["cardNumber"].toString(),
         expMonth: snapshot["expMonth"].toString(),
         expYear: snapshot["expYear"].toString(),
-        backgroundColor: Colors.blue,
+        backgroundColor: getCardColor(snapshot["bankName"],),
         bankName: snapshot["bankName"],
         holderName: snapshot["holderName"],
       ),
