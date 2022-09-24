@@ -10,10 +10,7 @@ import 'package:sriwallet/auth/login.dart';
 import 'package:sriwallet/auth/screens/register.dart';
 import 'package:sriwallet/cards/add_card.dart';
 import 'package:sriwallet/cards/card_color.dart';
-import 'package:sriwallet/cards/card_exp_formattor.dart';
-import 'package:sriwallet/cards/card_number_formattor.dart';
 import 'package:sriwallet/cards/card.dart';
-import 'package:sriwallet/cards/card_types.dart';
 import 'package:sriwallet/cards/no_card.dart';
 import 'package:sriwallet/cards/view_card.dart';
 import 'package:sriwallet/money/screens/receive_money.dart';
@@ -45,10 +42,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        
         backgroundColor: Theme.of(context).primaryColor,
         title: const Text(
-
           "Home",
           style: TextStyle(color: Colors.white),
         ),
@@ -63,10 +58,16 @@ class _HomePageState extends State<HomePage> {
               children: const [
                 Text(
                   "My Balance",
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
                 ),
               ],
             ),
+          ),
+          Text(
+            "LKR 260",
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -78,50 +79,49 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       "My Cards",
                       style: TextStyle(
-                        fontSize: 28,
+                        fontSize: 20,
                       ),
                     ),
                   ],
                 ),
                 //add cards button
                 Container(
-                    //padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[350], shape: BoxShape.circle),
                     child: IconButton(
-                      icon: const Icon(
-                        Icons.add_card_rounded,
-                        size: 28,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AddCardPage()));
-                      },
-                    ))
+                  icon: Icon(
+                    Icons.add_card_rounded,
+                    size: 28,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddCardPage()));
+                  },
+                ))
               ],
             ),
           ),
           SizedBox(
-            height: 25,
+            height: 10,
           ),
           buildCardSlider(context),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
-                  onTap: (){
+                onTap: () {
                   Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ReceiveMoneyPage()));
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ReceiveMoneyPage()));
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     decoration: BoxDecoration(
-                        border: Border.all(color: Colors.blue.shade200, width: 2),
+                        border:
+                            Border.all(color: Colors.blue.shade200, width: 2),
                         borderRadius: BorderRadius.circular(10)),
                     height: 100,
                     width: MediaQuery.of(context).size.width * 0.45,
@@ -138,18 +138,18 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SendMoneyPage()));
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SendMoneyPage()));
                 },
-
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     decoration: BoxDecoration(
-                        border: Border.all(color: Colors.blue.shade900, width: 2),
+                        border:
+                            Border.all(color: Colors.blue.shade900, width: 2),
                         borderRadius: BorderRadius.circular(10)),
                     height: 100,
                     width: MediaQuery.of(context).size.width * 0.45,
@@ -191,7 +191,7 @@ class _HomePageState extends State<HomePage> {
             },
             child: Container(
               height: 250,
-              child: snapshot.data != null && snapshot.data!.docs.isEmpty 
+              child: snapshot.data != null && snapshot.data!.docs.isEmpty
                   ? NoCard()
                   : PageView.builder(
                       controller: _controller,
