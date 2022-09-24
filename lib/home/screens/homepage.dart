@@ -42,6 +42,19 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          TextButton.icon(
+              onPressed: () {
+                auth.signOut();
+                     Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const LoginPage()));
+              },
+              icon: Icon(Icons.logout_outlined),
+              label: const Text(
+                "SIGN OUT",
+                style: TextStyle(color: Colors.white),
+              ))
+        ],
         backgroundColor: Theme.of(context).primaryColor,
         title: const Text(
           "Home",
@@ -65,10 +78,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          Text(
-            "LKR 260",
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-          ),
+          textStreamBuilder(context),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Row(
@@ -234,5 +244,34 @@ class _HomePageState extends State<HomePage> {
         holderName: snapshot["holderName"],
       ),
     );
+  }
+
+  Widget textStreamBuilder(BuildContext context) {
+    return StreamBuilder(
+        stream: db
+            .collection('users')
+            .doc(auth.currentUser!.uid)
+            .collection('wallet')
+            .doc(auth.currentUser!.phoneNumber)
+            .snapshots(),
+        builder: (context, snapshot) {
+          final userdoc = snapshot.data as DocumentSnapshot?;
+          if (userdoc != null) {
+            var amount = userdoc!['balance'].toString();
+            var currency = userdoc['currency'].toString();
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                "$currency $amount",
+                style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor),
+              ),
+            );
+          } else {
+            return Text("Failed to load balance");
+          }
+        });
   }
 }
