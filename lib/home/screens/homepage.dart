@@ -257,7 +257,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context, snapshot) {
           final userdoc = snapshot.data as DocumentSnapshot?;
           if (userdoc != null) {
-            var amount = userdoc!['balance'].toString();
+            var amount = userdoc['balance'].toString();
             var currency = userdoc['currency'].toString();
             return Padding(
               padding: const EdgeInsets.all(10.0),

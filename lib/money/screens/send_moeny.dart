@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qrscan/qrscan.dart';
 
@@ -12,13 +13,17 @@ class SendMoneyPage extends StatefulWidget {
 }
 
 class _SendMoneyPageState extends State<SendMoneyPage> {
-  String? qrResult = "";
+  String qrResult = "";
 
   String? receiverName = "";
 
   TextEditingController amountController = TextEditingController();
 
   FirebaseFirestore db = FirebaseFirestore.instance;
+
+  bool enableSendButton = false;
+
+  final LocalAuthentication localAuthentication = LocalAuthentication();
   @override
   void initState() {
     super.initState();
@@ -58,8 +63,44 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
               children: [
                 qrResult == ""
                     ? const SizedBox()
-                    : textStreamBuilder(context, qrResult!),
-                amountInput(context)
+                    : textStreamBuilder(context, qrResult),
+                amountInput(context),
+                ElevatedButton(
+                    onPressed: !enableSendButton ? null : ()  async {
+                   
+                      final bool canAuthWithBio =
+                          await localAuthentication.canCheckBiometrics;
+
+                      final bool canAuth = canAuthWithBio ||
+                          await localAuthentication.isDeviceSupported();
+                      final List<BiometricType> availableBiometrics =
+                          await localAuthentication.getAvailableBiometrics();
+
+                      if (canAuth &&
+                          (
+                              availableBiometrics
+                                  .contains(BiometricType.face))) {
+                        final bool didAuthenticate =
+                            await localAuthentication.authenticate(
+                                options: const AuthenticationOptions(
+                                    sensitiveTransaction: false,
+                                    biometricOnly: false),
+                                localizedReason: 'Meh uba kiyala sure da?');
+
+                                if(didAuthenticate){
+                                  //do
+                                  print("auth wenaw");
+
+                                    
+
+
+                                }else{
+                                  //ado corry
+                                  print("tho kauda");
+                                }
+                      }
+                    },
+                    child: const Text("Send Money"))
               ],
             )),
     );
@@ -84,7 +125,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
     const source = Source.cache;
 
     setState(() {
-      qrResult = result;
+      qrResult = result!;
     });
   }
 
@@ -92,15 +133,23 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
     return StreamBuilder(
         stream: db.collection('users').doc(result).snapshots(),
         builder: (context, snapshot) {
-          DocumentSnapshot userdoc = snapshot.data as DocumentSnapshot;
-          var name = userdoc['fullname'].toString();
-          return Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Text(
-              "Send Money to $name",
-              style: const TextStyle(fontSize: 20),
-            ),
-          );
+          if (snapshot.data != null) {
+            DocumentSnapshot userdoc = snapshot.data as DocumentSnapshot;
+            var name = userdoc['fullname'].toString();
+            var phoneNumber = "0${userdoc['mobile']}";
+            return Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                "Send Money to $name \n $phoneNumber",
+                style: const TextStyle(
+                  fontSize: 20,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            );
+          } else {
+            return const Text("unable to retrieve user information");
+          }
         });
   }
 
@@ -110,7 +159,21 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
       child: Visibility(
         visible: !(qrResult == "" || qrResult == 'NOPE'),
         child: TextField(
+         
+          onChanged: (value) {
+            if(value.isEmpty){
+              setState(() {
+                enableSendButton = false;
+              });
+            }else{
+              setState(() {
+                enableSendButton = true;
+              });
+            }
+
+          },
           decoration: InputDecoration(
+
               label: const Text("Amount"),
               counterText: "",
               border: OutlineInputBorder(
