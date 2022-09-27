@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,7 +24,8 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   bool enableSendButton = false;
-
+  String mobile = "";
+  int amount = 0;
   final LocalAuthentication localAuthentication = LocalAuthentication();
   @override
   void initState() {
@@ -66,40 +69,61 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                     : textStreamBuilder(context, qrResult),
                 amountInput(context),
                 ElevatedButton(
-                    onPressed: !enableSendButton ? null : ()  async {
-                   
-                      final bool canAuthWithBio =
-                          await localAuthentication.canCheckBiometrics;
+                    onPressed: !enableSendButton
+                        ? null
+                        : () async {
+                            final bool canAuthWithBio =
+                                await localAuthentication.canCheckBiometrics;
 
-                      final bool canAuth = canAuthWithBio ||
-                          await localAuthentication.isDeviceSupported();
-                      final List<BiometricType> availableBiometrics =
-                          await localAuthentication.getAvailableBiometrics();
+                            final bool canAuth = canAuthWithBio &&
+                                await localAuthentication.isDeviceSupported();
+                            final List<BiometricType> availableBiometrics =
+                                await localAuthentication
+                                    .getAvailableBiometrics();
 
-                      if (canAuth &&
-                          (
-                              availableBiometrics
-                                  .contains(BiometricType.face))) {
-                        final bool didAuthenticate =
-                            await localAuthentication.authenticate(
-                                options: const AuthenticationOptions(
-                                    sensitiveTransaction: false,
-                                    biometricOnly: false),
-                                localizedReason: 'Meh uba kiyala sure da?');
+                      if (canAuth && (availableBiometrics.contains(BiometricType.strong))) {
+                              final bool didAuthenticate =
+                                  await localAuthentication.authenticate(
+                                      options: const AuthenticationOptions(
+                                          sensitiveTransaction: true,
+                                          biometricOnly: false),
+                                      localizedReason:
+                                          'Meh uba kiyala sure da?');
 
-                                if(didAuthenticate){
-                                  //do
-                                  print("auth wenaw");
+                              if (didAuthenticate) {
+                                //do
+                                if (mobile != "") {
+                                  var doc = db
+                                      .collection('users')
+                                      .doc(qrResult.toString())
+                                      .collection('wallet')
+                                      .doc(mobile)
+                                      .get()
+                                      .then((DocumentSnapshot snapshot) {
+                                    var data =
+                                        snapshot.data() as Map<String, dynamic>;
 
-                                    
+                                    amount = data['amount'];
+                                  });
 
-
-                                }else{
-                                  //ado corry
-                                  print("tho kauda");
+                                  db
+                                      .collection('users')
+                                      .doc(qrResult.toString())
+                                      .collection('wallet')
+                                      .doc(mobile)
+                                      .update({
+                                    "balance": amount +
+                                        int.parse(amountController.text)
+                                  });
                                 }
-                      }
-                    },
+
+                                Navigator.of(context).pop();
+                              } else {
+                                //ado corry
+                                print("tho kauda");
+                              }
+                            }
+                          },
                     child: const Text("Send Money"))
               ],
             )),
@@ -137,6 +161,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
             DocumentSnapshot userdoc = snapshot.data as DocumentSnapshot;
             var name = userdoc['fullname'].toString();
             var phoneNumber = "0${userdoc['mobile']}";
+            mobile ="+94${userdoc['mobile']}";
             return Padding(
               padding: const EdgeInsets.all(20.0),
               child: Text(
@@ -159,21 +184,18 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
       child: Visibility(
         visible: !(qrResult == "" || qrResult == 'NOPE'),
         child: TextField(
-         
           onChanged: (value) {
-            if(value.isEmpty){
+            if (value.isEmpty) {
               setState(() {
                 enableSendButton = false;
               });
-            }else{
+            } else {
               setState(() {
                 enableSendButton = true;
               });
             }
-
           },
           decoration: InputDecoration(
-
               label: const Text("Amount"),
               counterText: "",
               border: OutlineInputBorder(

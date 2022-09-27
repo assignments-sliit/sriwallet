@@ -19,15 +19,16 @@ Future<void> createUserAndWallet(
 
   final walletInfo = <String, dynamic>{
     "name": "Default Wallet",
-    "mobile": phoneNumber,
+    "mobile": "+94$phoneNumber",
     "currency": "LKR",
+    "balance":0
   };
 
   return users.doc(auth.currentUser?.uid).set(newUserData).then((result) => {
         users
             .doc(auth.currentUser?.uid)
             .collection('wallet')
-            .doc(phoneNumber)
+            .doc("+94$phoneNumber")
             .set(walletInfo)
       });
 }
