@@ -1,18 +1,13 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:sriwallet/auth/login.dart';
-import 'package:sriwallet/auth/screens/register.dart';
-import 'package:sriwallet/cards/add_card.dart';
-import 'package:sriwallet/cards/card_color.dart';
-import 'package:sriwallet/cards/card.dart';
-import 'package:sriwallet/cards/no_card.dart';
-import 'package:sriwallet/cards/view_card.dart';
+import 'package:sriwallet/auth/screens/login.dart';
+import 'package:sriwallet/cards/screens/add_card.dart';
+import 'package:sriwallet/cards/utils/card_color.dart';
+import 'package:sriwallet/cards/widgets/card.dart';
+import 'package:sriwallet/cards/widgets/no_card.dart';
+import 'package:sriwallet/cards/screens/view_card.dart';
 import 'package:sriwallet/money/screens/receive_money.dart';
 import 'package:sriwallet/money/screens/send_moeny.dart';
 
@@ -49,7 +44,7 @@ class _HomePageState extends State<HomePage> {
                      Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const LoginPage()));
               },
-              icon: Icon(Icons.logout_outlined),
+              icon: const Icon(Icons.logout_outlined),
               label: const Text(
                 "SIGN OUT",
                 style: TextStyle(color: Colors.white),
@@ -112,7 +107,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           buildCardSlider(context),
@@ -270,7 +265,7 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           } else {
-            return Text("Failed to load balance");
+            return const  Text("Failed to load balance");
           }
         });
   }

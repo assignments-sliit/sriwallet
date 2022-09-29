@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sriwallet/cards/card_types.dart';
+import 'package:sriwallet/cards/utils/card_types.dart';
 
 class CardItem extends StatelessWidget {
-
   final String types;
   final String? cardNumber;
   final String expMonth;
@@ -14,7 +13,6 @@ class CardItem extends StatelessWidget {
 
   const CardItem(
       {Key? key,
-
       required this.types,
       required this.cardNumber,
       required this.expMonth,
@@ -41,7 +39,6 @@ class CardItem extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-            
                   Text(bankName,
                       style: const TextStyle(
                           color: Colors.white,
@@ -68,19 +65,22 @@ class CardItem extends StatelessWidget {
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 24)),
-                          const SizedBox(height: 7,),
+                  const SizedBox(
+                    height: 7,
+                  ),
                   Text('$expMonth/$expYear',
                       style: const TextStyle(
-                        
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 16)),
                 ],
               ),
-              //  Chip(label: Text("Default"),backgroundColor: Colors.white,)
+             
             ],
           ),
-         const SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

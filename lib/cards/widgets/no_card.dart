@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:sriwallet/cards/add_card.dart';
+import 'package:sriwallet/cards/screens/add_card.dart';
 
 class NoCard extends StatelessWidget {
   const NoCard({Key? key}) : super(key: key);
@@ -11,10 +8,8 @@ class NoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-              Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AddCardPage()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const AddCardPage()));
       },
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -30,7 +25,7 @@ class NoCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton.icon(
-                  style: TextButton.styleFrom(primary: Colors.white),
+                    style: TextButton.styleFrom(primary: Colors.white),
                     onPressed: () {
                       Navigator.push(
                           context,

@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_auth/local_auth.dart';
@@ -22,6 +23,8 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
   TextEditingController amountController = TextEditingController();
 
   FirebaseFirestore db = FirebaseFirestore.instance;
+
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   bool enableSendButton = false;
   String mobile = "";
@@ -62,7 +65,6 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
             ))
           : Center(
               child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 qrResult == ""
                     ? const SizedBox()
@@ -81,7 +83,9 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                                 await localAuthentication
                                     .getAvailableBiometrics();
 
-                      if (canAuth && (availableBiometrics.contains(BiometricType.strong))) {
+                            if (canAuth &&
+                                (availableBiometrics
+                                    .contains(BiometricType.strong))) {
                               final bool didAuthenticate =
                                   await localAuthentication.authenticate(
                                       options: const AuthenticationOptions(
@@ -106,6 +110,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                                     amount = data['amount'];
                                   });
 
+                                  //increase money in receiver
                                   db
                                       .collection('users')
                                       .doc(qrResult.toString())
@@ -115,12 +120,28 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                                     "balance": amount +
                                         int.parse(amountController.text)
                                   });
+
+                                  //decrease money in receiver
+                                  db
+                                      .collection('users')
+                                      .doc(auth.currentUser!.uid)
+                                      .collection('wallet')
+                                      .doc(auth.currentUser!.phoneNumber)
+                                      .update({
+                                    "balance": amount -
+                                        int.parse(amountController.text)
+                                  });
                                 }
 
+                                // ignore: use_build_context_synchronously
                                 Navigator.of(context).pop();
                               } else {
-                                //ado corry
-                                print("tho kauda");
+                                const snackBar = SnackBar(
+                                  content: Text('Authorization Failed!'),
+                                );
+                                // ignore: use_build_context_synchronously
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
                               }
                             }
                           },
@@ -145,8 +166,6 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
 
   processQr() async {
     String? result = await scan();
-    String name = "";
-    const source = Source.cache;
 
     setState(() {
       qrResult = result!;
@@ -161,7 +180,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
             DocumentSnapshot userdoc = snapshot.data as DocumentSnapshot;
             var name = userdoc['fullname'].toString();
             var phoneNumber = "0${userdoc['mobile']}";
-            mobile ="+94${userdoc['mobile']}";
+            mobile = "+94${userdoc['mobile']}";
             return Padding(
               padding: const EdgeInsets.all(20.0),
               child: Text(

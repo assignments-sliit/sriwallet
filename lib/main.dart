@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sriwallet/auth/screens/register.dart';
 import 'package:sriwallet/home/screens/homepage.dart';
 
-Future<void> main() async{
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
@@ -20,15 +20,16 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'SRI WALLET',
       theme: ThemeData(
-       useMaterial3: true,
+        useMaterial3: true,
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: FirebaseAuth.instance.currentUser == null ? const RegisterPage() : const HomePage(),
-      routes:  <String, WidgetBuilder>{
-        '/home':(_) => const HomePage(),
-        '/register':(_) => const RegisterPage(),
-      //  '/login':(_) => const 
+      home: FirebaseAuth.instance.currentUser == null
+          ? const RegisterPage()
+          : const HomePage(),
+      routes: <String, WidgetBuilder>{
+        '/home': (_) => const HomePage(),
+        '/register': (_) => const RegisterPage(),
       },
     );
   }

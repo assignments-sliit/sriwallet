@@ -6,7 +6,6 @@ import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:sriwallet/auth/screens/register.dart';
 import 'package:sriwallet/home/screens/homepage.dart';
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -53,11 +52,9 @@ class _LoginPageState extends State<LoginPage> {
             color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
 
     return Scaffold(
-        appBar: AppBar(
-        
+      appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: const Text(
-
           "Login",
           style: TextStyle(color: Colors.white),
         ),
@@ -65,21 +62,21 @@ class _LoginPageState extends State<LoginPage> {
       body: SingleChildScrollView(
         child: Form(
           key: _registerPageKey,
-          child: Column(
-
+          child: Column(children: [
+            Form(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Form(
-                    child: Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    phoneNumberInput(),
-                    otpInput(),
-                    masterButton(),
-                    const SizedBox(height: 370,),
-                    register()
-                  ],
-                )),
-              ]),
+                phoneNumberInput(),
+                otpInput(),
+                masterButton(),
+                const SizedBox(
+                  height: 370,
+                ),
+                register()
+              ],
+            )),
+          ]),
         ),
       ),
     );
@@ -149,14 +146,12 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
-              //    height: MediaQuery.of(context).size.width / 4,
               child: Padding(
                 padding: const EdgeInsets.only(
                     left: 10, right: 10, bottom: 10, top: 10),
                 child: TextFormField(
                   onChanged: (value) {
                     if (value.length == 6) {
-                      //   FocusScope.of(context).nextFocus();
                       setState(() {
                         isOtpFilled = true;
                       });
@@ -205,24 +200,24 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 }
               },
-        child: Text(!verificationSent ? "Send OTP" : "LOGIN", style:const TextStyle(color: Colors.white)),
+        child: Text(!verificationSent ? "Send OTP" : "LOGIN",
+            style: const TextStyle(color: Colors.white)),
       ),
     );
   }
-      Widget register() {
+
+  Widget register() {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 10),
-      child: ElevatedButton(  
+      child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-         
           minimumSize: const Size.fromHeight(50),
         ),
         onPressed: () {
-                Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const RegisterPage()));
-              },
-        child: const Text("REGISTER",style: TextStyle(color: Colors.blue)),
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const RegisterPage()));
+        },
+        child: const Text("REGISTER", style: TextStyle(color: Colors.blue)),
       ),
     );
   }
@@ -234,7 +229,6 @@ class _LoginPageState extends State<LoginPage> {
 
     await auth.signInWithCredential(phoneAuthCredential).then((value) => {
           {
-            
             progressDialog.hide().then((value) => Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const HomePage())))

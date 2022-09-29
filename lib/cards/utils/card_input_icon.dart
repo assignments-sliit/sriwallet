@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sriwallet/cards/card_types.dart';
+import 'package:sriwallet/cards/utils/card_types.dart';
 
 CardType getCardTypeFromNumber(String input) {
   CardType cardType;

@@ -5,10 +5,10 @@ class CardNumberInputFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     var text = newValue.text;
-if (newValue.selection.baseOffset == 0) {
+    if (newValue.selection.baseOffset == 0) {
       return newValue;
     }
-var buffer = StringBuffer();
+    var buffer = StringBuffer();
     for (int i = 0; i < text.length; i++) {
       buffer.write(text[i]);
       var nonZeroIndex = i + 1;
@@ -16,7 +16,7 @@ var buffer = StringBuffer();
         buffer.write('  '); // Add double spaces.
       }
     }
-var string = buffer.toString();
+    var string = buffer.toString();
     return newValue.copyWith(
         text: string,
         selection: TextSelection.collapsed(offset: string.length));

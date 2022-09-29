@@ -5,9 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:sriwallet/auth/functions/create_user.dart';
 import 'package:sriwallet/auth/functions/validators.dart';
-import 'package:sriwallet/auth/login.dart';
+import 'package:sriwallet/auth/screens/login.dart';
 import 'package:sriwallet/home/screens/homepage.dart';
-
 import 'package:sriwallet/utils/input/name_input.dart';
 import 'package:sriwallet/utils/labels/register_labels.dart';
 
@@ -61,10 +60,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
     return Scaffold(
       appBar: AppBar(
-        
         backgroundColor: Theme.of(context).primaryColor,
         title: const Text(
-
           "Register",
           style: TextStyle(color: Colors.white),
         ),
@@ -239,7 +236,10 @@ class _RegisterPageState extends State<RegisterPage> {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const LoginPage()));
         },
-        child: const Text("LOGIN", style: TextStyle(color: Colors.white),),
+        child: const Text(
+          "LOGIN",
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }
