@@ -3,8 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
+import 'package:sriwallet/auth/constants/labels/login_labels.dart';
+import 'package:sriwallet/auth/constants/labels/register_labels.dart';
 import 'package:sriwallet/auth/screens/register.dart';
 import 'package:sriwallet/home/screens/homepage.dart';
+import 'package:sriwallet/constants/button_labels.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -67,6 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                loginWithMobileNoText(),
                 phoneNumberInput(),
                 otpInput(),
                 masterButton(),
@@ -100,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget phoneNumberInput() {
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 20),
       child: TextFormField(
         onChanged: (value) {
           setState(() {
@@ -122,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
         keyboardType: TextInputType.phone,
         decoration: InputDecoration(
             counterText: "",
-            label: const Text("Mobile No"),
+            label: const Text("Mobile Number"),
             prefix: const Padding(
               padding: EdgeInsets.all(1.0),
               child: Text(
@@ -200,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 }
               },
-        child: Text(!verificationSent ? "Send OTP" : "LOGIN",
+        child: Text(!verificationSent ? ButtonConstants.SEND_OTP : ButtonConstants.LOGIN,
             style: const TextStyle(color: Colors.white)),
       ),
     );
@@ -208,10 +212,11 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget register() {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 10),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
           minimumSize: const Size.fromHeight(50),
+          side: const BorderSide(width: 2.0, color: Colors.blue),
         ),
         onPressed: () {
           Navigator.pushReplacement(context,

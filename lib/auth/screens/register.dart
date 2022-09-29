@@ -3,12 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
+import 'package:sriwallet/auth/constants/labels/register_labels.dart';
 import 'package:sriwallet/auth/functions/create_user.dart';
 import 'package:sriwallet/auth/functions/validators.dart';
 import 'package:sriwallet/auth/screens/login.dart';
+import 'package:sriwallet/constants/input_labels.dart';
 import 'package:sriwallet/home/screens/homepage.dart';
+import 'package:sriwallet/constants/button_labels.dart';
 import 'package:sriwallet/utils/input/name_input.dart';
-import 'package:sriwallet/utils/labels/register_labels.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -206,20 +208,28 @@ class _RegisterPageState extends State<RegisterPage> {
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+          primary: Colors.lightBlue[500],
           minimumSize: const Size.fromHeight(50),
         ),
         onPressed: !phoneNumberFilled
             ? null
             : () {
-                if (!verificationSent) {
-                  verifyMobile();
-                } else {
-                  if (_registerPageKey.currentState!.validate()) {
-                    loginWithMobileNo(context);
+                if (_registerPageKey.currentState!.validate()) {
+                  if (!verificationSent) {
+                    verifyMobile();
+                  } else {
+                    if (_registerPageKey.currentState!.validate()) {
+                      loginWithMobileNo(context);
+                    }
                   }
                 }
               },
-        child: Text(!verificationSent ? "Send OTP" : "Register with Mobile"),
+        child: Text(
+          !verificationSent
+              ? ButtonConstants.SEND_OTP
+              : ButtonConstants.REGISTER_WITH_MOBILE,
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
     );
   }
@@ -227,18 +237,18 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget goAndLogin() {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: Colors.lightBlue[500],
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
           minimumSize: const Size.fromHeight(50),
+          side: const BorderSide(width: 2.0, color: Colors.blue),
         ),
         onPressed: () {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const LoginPage()));
         },
-        child: const Text(
-          "LOGIN",
-          style: TextStyle(color: Colors.white),
+        child: Text(
+          ButtonConstants.LOGIN,
+          style: const TextStyle(color: Colors.blue),
         ),
       ),
     );
@@ -272,9 +282,8 @@ class _RegisterPageState extends State<RegisterPage> {
       child: TextFormField(
         controller: nicController,
         validator: nicValidator,
-        //  onChanged: nicValidator,
         decoration: InputDecoration(
-            label: const Text("NIC"),
+            label: const Text(InputLabels.NIC),
             counterText: "",
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5.0),
@@ -291,7 +300,7 @@ class _RegisterPageState extends State<RegisterPage> {
         validator: emailValidator,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
-            label: const Text("Email Address"),
+            label: const Text(InputLabels.EMAIL),
             counterText: "",
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5.0),

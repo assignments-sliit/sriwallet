@@ -35,14 +35,14 @@ class _AddCardPageState extends State<AddCardPage> {
           backgroundColor: Theme.of(context).primaryColor,
           title: const Text(
             "Add a card",
-            style: TextStyle(color: Colors.blue),
+            style: TextStyle(color: Colors.white),
           ),
         ),
         body: SafeArea(
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.only(top: 30, right: 10,left: 10),
                 child: TextFormField(
                   maxLength: 22,
                   inputFormatters: [
@@ -64,7 +64,7 @@ class _AddCardPageState extends State<AddCardPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.only(top: 15, right: 10,left: 10),
                 child: TextFormField(
                   controller: holderNameController,
                   decoration: InputDecoration(
@@ -75,7 +75,7 @@ class _AddCardPageState extends State<AddCardPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.only(top: 15, right: 10,left: 10),
                 child: TextFormField(
                   controller: bankNameController,
                   decoration: InputDecoration(
@@ -89,7 +89,7 @@ class _AddCardPageState extends State<AddCardPage> {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(5.0),
+                      padding: const EdgeInsets.only(top: 15, right: 10,left: 10),
                       child: TextFormField(
                         controller: expController,
                         maxLength: 5,
@@ -110,7 +110,7 @@ class _AddCardPageState extends State<AddCardPage> {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(5.0),
+                      padding: const EdgeInsets.only(top: 15, right: 10,left: 10),
                       child: TextFormField(
                         maxLength: 3,
                         keyboardType: TextInputType.number,
@@ -127,7 +127,7 @@ class _AddCardPageState extends State<AddCardPage> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding:const EdgeInsets.only(top: 30, right: 10,left: 10),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
