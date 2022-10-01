@@ -92,7 +92,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                                           sensitiveTransaction: true,
                                           biometricOnly: false),
                                       localizedReason:
-                                          'Meh uba kiyala sure da?');
+                                          'Scan your Fingerprint to complete Transaction');
 
                               if (didAuthenticate) {
                                 //do
@@ -107,11 +107,9 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                                     var data =
                                         snapshot.data() as Map<String, dynamic>;
 
-                                    amount = data['amount'];
-                                  });
+                                    amount = data['balance'];
 
-                                  //increase money in receiver
-                                  db
+                                        db
                                       .collection('users')
                                       .doc(qrResult.toString())
                                       .collection('wallet')
@@ -131,6 +129,10 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                                     "balance": amount -
                                         int.parse(amountController.text)
                                   });
+                                  });
+
+                                  //increase money in receiver
+                              
                                 }
 
                                 // ignore: use_build_context_synchronously
