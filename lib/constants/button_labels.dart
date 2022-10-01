@@ -5,5 +5,4 @@ class ButtonConstants {
   static String REGISTER = "REGISTER";
   static String REGISTER_WITH_MOBILE = "REGISTER WITH MOBILE";
 
-  static String NIC = "NIC";
 }
