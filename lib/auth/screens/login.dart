@@ -3,11 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
-import 'package:sriwallet/auth/constants/labels/login_labels.dart';
-import 'package:sriwallet/auth/constants/labels/register_labels.dart';
 import 'package:sriwallet/auth/screens/register.dart';
+import 'package:sriwallet/constants/colors/text_color.dart';
+import 'package:sriwallet/constants/labels/button_labels.dart';
+import 'package:sriwallet/constants/labels/input_labels.dart';
+import 'package:sriwallet/constants/texts/login_texts.dart';
 import 'package:sriwallet/home/screens/homepage.dart';
-import 'package:sriwallet/constants/button_labels.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -127,11 +128,11 @@ class _LoginPageState extends State<LoginPage> {
         decoration: InputDecoration(
             counterText: "",
             label: const Text("Mobile Number"),
-            prefix: const Padding(
-              padding: EdgeInsets.all(1.0),
+            prefix:  Padding(
+              padding: const EdgeInsets.all(1.0),
               child: Text(
                 "+94",
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: getInputPrefixTextColorForTheme(context)),
               ),
             ),
             hintText: "771234567",
@@ -172,8 +173,9 @@ class _LoginPageState extends State<LoginPage> {
                   maxLength: 6,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                      label: const Text("OTP Code"),
+                      label: const Text(InputLabels.OTP),
                       counterText: "",
+                      hintText: HintTexts.OTP,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
                           borderSide: BorderSide(

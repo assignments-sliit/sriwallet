@@ -8,6 +8,8 @@ import 'package:sriwallet/cards/utils/card_color.dart';
 import 'package:sriwallet/cards/widgets/card.dart';
 import 'package:sriwallet/cards/widgets/no_card.dart';
 import 'package:sriwallet/cards/screens/view_card.dart';
+import 'package:sriwallet/constants/colors/icon_color.dart';
+import 'package:sriwallet/constants/colors/text_color.dart';
 import 'package:sriwallet/money/screens/receive_money.dart';
 import 'package:sriwallet/money/screens/send_moeny.dart';
 
@@ -41,10 +43,13 @@ class _HomePageState extends State<HomePage> {
           TextButton.icon(
               onPressed: () {
                 auth.signOut();
-                     Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const LoginPage()));
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()));
               },
-              icon: const Icon(Icons.logout_outlined),
+              icon: const Icon(
+                Icons.logout_outlined,
+                color: Colors.white,
+              ),
               label: const Text(
                 "SIGN OUT",
                 style: TextStyle(color: Colors.white),
@@ -56,17 +61,20 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black87
+          : Colors.white,
       body: SafeArea(
           child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: const EdgeInsets.only(top: 10, left: 15),
             child: Row(
-              children: const [
+              children: [
                 Text(
                   "My Balance",
                   style: TextStyle(
+                    color: getTextColorFromTheme(context),
                     fontSize: 20,
                   ),
                 ),
@@ -75,7 +83,7 @@ class _HomePageState extends State<HomePage> {
           ),
           textStreamBuilder(context),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: const EdgeInsets.only(left: 15,top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -95,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                   icon: Icon(
                     Icons.add_card_rounded,
                     size: 28,
-                    color: Theme.of(context).primaryColor,
+                    color: getIconColorFromTheme(context),
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -256,16 +264,27 @@ class _HomePageState extends State<HomePage> {
             var currency = userdoc['currency'].toString();
             return Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Text(
-                "$currency $amount",
-                style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor),
+              child: Container(
+             //   color: Theme.of(context).primaryColor,
+                height: MediaQuery.of(context).size.height * 0.09,
+                width: MediaQuery.of(context).size.width * 0.9,
+                 decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(20)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    "$currency $amount",
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: getTextColorFromTheme(context)),
+                  ),
+                ),
               ),
             );
           } else {
-            return const  Text("Failed to load balance");
+            return const Text("Failed to load balance");
           }
         });
   }

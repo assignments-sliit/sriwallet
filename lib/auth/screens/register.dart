@@ -3,13 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
-import 'package:sriwallet/auth/constants/labels/register_labels.dart';
 import 'package:sriwallet/auth/functions/create_user.dart';
 import 'package:sriwallet/auth/functions/validators.dart';
 import 'package:sriwallet/auth/screens/login.dart';
-import 'package:sriwallet/constants/input_labels.dart';
+import 'package:sriwallet/constants/colors/text_color.dart';
+import 'package:sriwallet/constants/labels/appbar_labels.dart';
+import 'package:sriwallet/constants/labels/button_labels.dart';
+import 'package:sriwallet/constants/labels/input_labels.dart';
+import 'package:sriwallet/constants/texts/register_texts.dart';
 import 'package:sriwallet/home/screens/homepage.dart';
-import 'package:sriwallet/constants/button_labels.dart';
 import 'package:sriwallet/utils/input/name_input.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -64,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: const Text(
-          "Register",
+          AppbarConstants.REGISTER,
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -88,12 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text("Already have an account?"),
-                    ),
-                  ],
+                  children: [alreadyHaveAccPrompt()],
                 ),
                 goAndLogin()
               ],
@@ -144,15 +141,16 @@ class _RegisterPageState extends State<RegisterPage> {
         keyboardType: TextInputType.phone,
         decoration: InputDecoration(
             counterText: "",
-            label: const Text("Mobile No"),
-            prefix: const Padding(
-              padding: EdgeInsets.all(1.0),
+            label: const Text(InputLabels.MOBILE_NO),
+            prefix: Padding(
+              padding: const EdgeInsets.all(1.0),
               child: Text(
                 "+94",
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(
+                    color: getInputPrefixTextColorForTheme(context)),
               ),
             ),
-            hintText: "771234567",
+            hintText: HintTexts.MOBILE_NO,
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5.0),
                 borderSide: BorderSide(color: Theme.of(context).primaryColor))),
@@ -190,7 +188,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   maxLength: 6,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                      label: const Text("OTP Code"),
+                      hintText: HintTexts.OTP,
+                      label: const Text(InputLabels.OTP),
                       counterText: "",
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
