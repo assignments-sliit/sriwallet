@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
+      darkTheme: ThemeData.dark(),
       home: FirebaseAuth.instance.currentUser == null
           ? const RegisterPage()
           : const HomePage(),
@@ -31,6 +32,8 @@ class MyApp extends StatelessWidget {
         '/home': (_) => const HomePage(),
         '/register': (_) => const RegisterPage(),
       },
+
+      //themeMode: currentTheme.,
     );
   }
 }

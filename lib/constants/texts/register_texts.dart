@@ -17,6 +17,9 @@ Widget registerWithPhoneNoText() {
   );
 }
 
-
-
-
+Widget alreadyHaveAccPrompt() {
+  return const Padding(
+    padding: EdgeInsets.all(8.0),
+    child: Text("Already have an account?"),
+  );
+}
