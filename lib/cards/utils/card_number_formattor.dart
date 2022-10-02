@@ -22,3 +22,17 @@ class CardNumberInputFormatter extends TextInputFormatter {
         selection: TextSelection.collapsed(offset: string.length));
   }
 }
+
+String getCardNumberFormatted(String input){
+   var buffer = StringBuffer();
+    for (int i = 0; i < input.length; i++) {
+      buffer.write(input[i]);
+      var nonZeroIndex = i + 1;
+      if (nonZeroIndex % 4 == 0 && nonZeroIndex != input.length) {
+        buffer.write('  '); // Add double spaces.
+      }
+    }
+    String string = buffer.toString();
+
+    return string;
+}
