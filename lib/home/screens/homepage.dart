@@ -5,6 +5,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:sriwallet/auth/screens/login.dart';
 import 'package:sriwallet/cards/screens/add_card.dart';
 import 'package:sriwallet/cards/utils/card_color.dart';
+import 'package:sriwallet/cards/utils/card_number_formattor.dart';
 import 'package:sriwallet/cards/widgets/card.dart';
 import 'package:sriwallet/cards/widgets/no_card.dart';
 import 'package:sriwallet/cards/screens/view_card.dart';
@@ -83,7 +84,7 @@ class _HomePageState extends State<HomePage> {
           ),
           textStreamBuilder(context),
           Padding(
-            padding: const EdgeInsets.only(left: 15,top: 10),
+            padding: const EdgeInsets.only(left: 15, top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -237,7 +238,7 @@ class _HomePageState extends State<HomePage> {
       height: 200,
       child: CardItem(
         types: snapshot!["type"],
-        cardNumber: snapshot["cardNumber"].toString(),
+        cardNumber: getCardNumberFormatted(snapshot["cardNumber"].toString()),
         expMonth: snapshot["expMonth"].toString(),
         expYear: snapshot["expYear"].toString(),
         backgroundColor: getCardColor(
@@ -265,20 +266,21 @@ class _HomePageState extends State<HomePage> {
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
-             //   color: Theme.of(context).primaryColor,
+                //   color: Theme.of(context).primaryColor,
                 height: MediaQuery.of(context).size.height * 0.09,
                 width: MediaQuery.of(context).size.width * 0.9,
-                 decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(20)),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(20)),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(15.0),
                   child: Text(
                     textAlign: TextAlign.center,
                     "$currency $amount",
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: getTextColorFromTheme(context)),
+                        color: Colors.white),
                   ),
                 ),
               ),
