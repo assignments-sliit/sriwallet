@@ -9,6 +9,7 @@ import 'package:sriwallet/constants/labels/button_labels.dart';
 import 'package:sriwallet/constants/labels/input_labels.dart';
 import 'package:sriwallet/constants/texts/login_texts.dart';
 import 'package:sriwallet/home/screens/homepage.dart';
+import 'package:sriwallet/themes/theme.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -57,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: appBarColor(context),
         title: const Text(
           "Login",
           style: TextStyle(color: Colors.white),
@@ -177,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                       counterText: "",
                       hintText: HintTexts.OTP,
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0),
+                          borderRadius: BorderRadius.circular(15.0),
                           borderSide: BorderSide(
                               color: Theme.of(context).primaryColor))),
                 ),

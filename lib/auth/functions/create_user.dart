@@ -21,7 +21,7 @@ Future<void> createUserAndWallet(
     "name": "Default Wallet",
     "mobile": "+94$phoneNumber",
     "currency": "LKR",
-    "balance":100
+    "balance":0
   };
 
   return users.doc(auth.currentUser?.uid).set(newUserData).then((result) => {

@@ -7,11 +7,11 @@ import 'package:sriwallet/auth/functions/create_user.dart';
 import 'package:sriwallet/auth/functions/validators.dart';
 import 'package:sriwallet/auth/screens/login.dart';
 import 'package:sriwallet/constants/colors/text_color.dart';
-import 'package:sriwallet/constants/labels/appbar_labels.dart';
 import 'package:sriwallet/constants/labels/button_labels.dart';
 import 'package:sriwallet/constants/labels/input_labels.dart';
 import 'package:sriwallet/constants/texts/register_texts.dart';
 import 'package:sriwallet/home/screens/homepage.dart';
+import 'package:sriwallet/themes/theme.dart';
 import 'package:sriwallet/utils/input/name_input.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -64,11 +64,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: const Text(
-          AppbarConstants.REGISTER,
-          style: TextStyle(color: Colors.white),
-        ),
+        backgroundColor: appBarColor(context),
+        title: Text(
+            "REGISTER WITH MOBILE",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, color: textLabelColor(context), fontWeight: FontWeight.bold),
+          ),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -78,7 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                registerWithPhoneNoText(),
+               // registerWithPhoneNoText(),
                 nameInput(nameController, context),
                 nicInput(),
                 emailInput(),
@@ -152,7 +153,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             hintText: HintTexts.MOBILE_NO,
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
+                borderRadius: BorderRadius.circular(10.0),
                 borderSide: BorderSide(color: Theme.of(context).primaryColor))),
       ),
     );
@@ -192,7 +193,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       label: const Text(InputLabels.OTP),
                       counterText: "",
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0),
+                          borderRadius: BorderRadius.circular(10.0),
                           borderSide: BorderSide(
                               color: Theme.of(context).primaryColor))),
                 ),
@@ -285,7 +286,7 @@ class _RegisterPageState extends State<RegisterPage> {
             label: const Text(InputLabels.NIC),
             counterText: "",
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
+                borderRadius: BorderRadius.circular(10.0),
                 borderSide: BorderSide(color: Theme.of(context).primaryColor))),
       ),
     );
@@ -302,7 +303,7 @@ class _RegisterPageState extends State<RegisterPage> {
             label: const Text(InputLabels.EMAIL),
             counterText: "",
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
+                borderRadius: BorderRadius.circular(10.0),
                 borderSide: BorderSide(color: Theme.of(context).primaryColor))),
       ),
     );

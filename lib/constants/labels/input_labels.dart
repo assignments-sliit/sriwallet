@@ -2,7 +2,7 @@ class InputLabels {
    static const String NIC = "NIC";
    static const String EMAIL = "Email Address";
    static const String MOBILE_NO = "Mobile Number";
-   static const String OTP = "OTP Cod";
+   static const String OTP = "OTP";
 
 }
 

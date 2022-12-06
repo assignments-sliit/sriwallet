@@ -11,8 +11,10 @@ import 'package:sriwallet/cards/widgets/no_card.dart';
 import 'package:sriwallet/cards/screens/view_card.dart';
 import 'package:sriwallet/constants/colors/icon_color.dart';
 import 'package:sriwallet/constants/colors/text_color.dart';
+import 'package:sriwallet/home/widgets/balance_text.dart';
 import 'package:sriwallet/money/screens/receive_money.dart';
 import 'package:sriwallet/money/screens/send_moeny.dart';
+import 'package:sriwallet/money/utils/currency_formatter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,7 +27,6 @@ class _HomePageState extends State<HomePage> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   FirebaseFirestore db = FirebaseFirestore.instance;
-  //CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   String? displayName = "";
 
@@ -37,37 +38,70 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          TextButton.icon(
-              onPressed: () {
-                auth.signOut();
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()));
-              },
-              icon: const Icon(
-                Icons.logout_outlined,
-                color: Colors.white,
-              ),
-              label: const Text(
-                "SIGN OUT",
-                style: TextStyle(color: Colors.white),
-              ))
-        ],
-        backgroundColor: Theme.of(context).primaryColor,
-        title: const Text(
-          "Home",
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
+      // appBar: AppBar(
+      //   actions: [
+      //     TextButton.icon(
+      //         onPressed: () {
+      //           auth.signOut();
+      //           Navigator.pushReplacement(context,
+      //               MaterialPageRoute(builder: (context) => const LoginPage()));
+      //         },
+      //         icon: const Icon(
+      //           Icons.logout_outlined,
+      //           color: Colors.white,
+      //         ),
+      //         label: const Text(
+      //           "SIGN OUT",
+      //           style: TextStyle(color: Colors.white),
+      //         ))
+      //   ],
+      //   backgroundColor: Theme.of(context).primaryColor,
+
+      // ),
       backgroundColor: Theme.of(context).brightness == Brightness.dark
           ? Colors.black87
           : Colors.white,
       body: SafeArea(
           child: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.09,
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                    Row(
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.only(top: 20.0),
+                          child: Icon(Icons.person, size: 32,),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8.0, top: 20),
+                          child: Text("Name of user", style: TextStyle(fontSize: 24),),
+                        ),
+                      ],
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 20.0),
+                      child: Icon(Icons.notifications,size: 32),
+                    )
+                  ]),
+                ],
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 10, left: 15),
             child: Row(
@@ -82,7 +116,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          textStreamBuilder(context),
+          balanceTextBuilder(context),
           Padding(
             padding: const EdgeInsets.only(left: 15, top: 10),
             child: Row(
@@ -99,8 +133,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 //add cards button
-                Container(
-                    child: IconButton(
+                IconButton(
                   icon: Icon(
                     Icons.add_card_rounded,
                     size: 28,
@@ -112,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                         MaterialPageRoute(
                             builder: (context) => const AddCardPage()));
                   },
-                ))
+                )
               ],
             ),
           ),
@@ -203,10 +236,10 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(
                       builder: (context) => const ViewCardPage()));
             },
-            child: Container(
+            child: SizedBox(
               height: 250,
               child: snapshot.data != null && snapshot.data!.docs.isEmpty
-                  ? NoCard()
+                  ? const NoCard()
                   : PageView.builder(
                       controller: _controller,
                       itemCount:
@@ -234,7 +267,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildCardItem(BuildContext context, QueryDocumentSnapshot? snapshot) {
-    return Container(
+    return SizedBox(
       height: 200,
       child: CardItem(
         types: snapshot!["type"],
@@ -248,46 +281,5 @@ class _HomePageState extends State<HomePage> {
         holderName: snapshot["holderName"],
       ),
     );
-  }
-
-  Widget textStreamBuilder(BuildContext context) {
-    return StreamBuilder(
-        stream: db
-            .collection('users')
-            .doc(auth.currentUser!.uid)
-            .collection('wallet')
-            .doc(auth.currentUser!.phoneNumber)
-            .snapshots(),
-        builder: (context, snapshot) {
-          final userdoc = snapshot.data as DocumentSnapshot?;
-          if (userdoc != null) {
-            var amount = userdoc['balance'].toString();
-            var currency = userdoc['currency'].toString();
-            return Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                //   color: Theme.of(context).primaryColor,
-                height: MediaQuery.of(context).size.height * 0.09,
-                width: MediaQuery.of(context).size.width * 0.9,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    textAlign: TextAlign.center,
-                    "$currency $amount",
-                    style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                ),
-              ),
-            );
-          } else {
-            return const Text("Failed to load balance");
-          }
-        });
   }
 }
