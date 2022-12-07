@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sriwallet/cards/screens/add_card.dart';
+import 'package:sriwallet/themes/theme.dart';
 
 class NoCard extends StatelessWidget {
   const NoCard({Key? key}) : super(key: key);
@@ -19,7 +20,12 @@ class NoCard extends StatelessWidget {
           //width: 175,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-              color: Colors.grey, borderRadius: BorderRadius.circular(20)),
+              border: Border.all(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.blue,
+                  width: 2),
+              borderRadius: BorderRadius.circular(20)),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -32,13 +38,14 @@ class NoCard extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => const AddCardPage()));
                     },
-                    icon: const Icon(
-                      Icons.add_card,
-                      size: 32,
-                    ),
-                    label: const Text(
-                      'Add a card',
-                      style: TextStyle(fontSize: 26),
+                    icon: Icon(Icons.add_card,
+                        size: 32,
+                        color: getButtonIconColor(context),),
+                    label: Text(
+                      'Add card',
+                      style: TextStyle(
+                          fontSize: 26,
+                          color: getButtonTextColor(context)),
                     ))
               ]),
         ),

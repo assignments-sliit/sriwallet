@@ -20,7 +20,7 @@ Widget balanceTextBuilder(BuildContext context) {
           var amount =
               getCurrencyFormatted(double.parse(userdoc['balance'].toString()));
           return Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(5.0),
             child: Container(
               height: MediaQuery.of(context).size.height * 0.09,
               width: MediaQuery.of(context).size.width * 0.9,

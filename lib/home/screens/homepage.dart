@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:sriwallet/auth/screens/login.dart';
@@ -15,6 +18,7 @@ import 'package:sriwallet/home/widgets/balance_text.dart';
 import 'package:sriwallet/money/screens/receive_money.dart';
 import 'package:sriwallet/money/screens/send_moeny.dart';
 import 'package:sriwallet/money/utils/currency_formatter.dart';
+import 'package:sriwallet/themes/theme.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -28,7 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   FirebaseFirestore db = FirebaseFirestore.instance;
 
-  String? displayName = "";
+  String displayName = "";
 
   final _controller = PageController();
 
@@ -45,26 +49,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   actions: [
-      //     TextButton.icon(
-      //         onPressed: () {
-      //           auth.signOut();
-      //           Navigator.pushReplacement(context,
-      //               MaterialPageRoute(builder: (context) => const LoginPage()));
-      //         },
-      //         icon: const Icon(
-      //           Icons.logout_outlined,
-      //           color: Colors.white,
-      //         ),
-      //         label: const Text(
-      //           "SIGN OUT",
-      //           style: TextStyle(color: Colors.white),
-      //         ))
-      //   ],
-      //   backgroundColor: Theme.of(context).primaryColor,
-
-      // ),
       backgroundColor: Theme.of(context).brightness == Brightness.dark
           ? Colors.black87
           : Colors.white,
@@ -73,31 +57,36 @@ class _HomePageState extends State<HomePage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(5.0),
-            child: Container(
+            child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.09,
               width: MediaQuery.of(context).size.width * 0.9,
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                    Row(
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.only(top: 20.0),
-                          child: Icon(Icons.person, size: 32,),
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          child: Row(
+                            children: [
+                              const Padding(
+                                  padding: EdgeInsets.only(top: 20.0),
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.blue,
+                                    child: const Text('MK'),
+                                  )),
+                              appbarUserName(context)
+                            ],
+                          ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 8.0, top: 20),
-                          child: Text("Name of user", style: TextStyle(fontSize: 24),),
-                        ),
-                      ],
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: Icon(Icons.notifications,size: 32),
-                    )
-                  ]),
+                          padding: const EdgeInsets.only(top: 20.0),
+                          child: Icon(
+                            Icons.notifications,
+                            size: 32,
+                            color: getIconColor(context),
+                          ),
+                        )
+                      ]),
                 ],
               ),
             ),
@@ -132,20 +121,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                //add cards button
-                IconButton(
-                  icon: Icon(
-                    Icons.add_card_rounded,
-                    size: 28,
-                    color: getIconColorFromTheme(context),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddCardPage()));
-                  },
-                )
               ],
             ),
           ),
@@ -153,67 +128,19 @@ class _HomePageState extends State<HomePage> {
             height: 10,
           ),
           buildCardSlider(context),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ReceiveMoneyPage()));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Colors.blue.shade200, width: 2),
-                        borderRadius: BorderRadius.circular(10)),
-                    height: 100,
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    //color: Colors.blue,
-                    child: Center(
-                        child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.file_download_outlined),
-                        Text("Receive Money")
-                      ],
-                    )),
-                  ),
-                ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, left: 10, right: 10),
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.import_export_outlined),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SendMoneyPage()));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Colors.blue.shade900, width: 2),
-                        borderRadius: BorderRadius.circular(10)),
-                    height: 100,
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    child: Center(
-                        child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.file_upload_outlined),
-                        Text("Send Money")
-                      ],
-                    )),
-                    // color: Colors.amber,
-                  ),
-                ),
-              )
-            ],
-          )
+              onPressed: () {
+                print("sssss");
+              },
+              label: Text("Send/Receive Money".toUpperCase()),
+            ),
+          ),
         ],
       )),
     );
@@ -280,6 +207,37 @@ class _HomePageState extends State<HomePage> {
         bankName: snapshot["bankName"],
         holderName: snapshot["holderName"],
       ),
+    );
+  }
+
+  Widget appbarUserName(BuildContext context) {
+    //  return Text(displayName, style: const TextStyle(fontSize: 24, color: Colors.black),);
+
+    return StreamBuilder<DocumentSnapshot>(
+      stream: db
+          .collection('users')
+          .doc(auth.currentUser?.uid)
+          .snapshots(includeMetadataChanges: false),
+      builder: ((context, AsyncSnapshot snapshot) {
+        if(snapshot.connectionState == ConnectionState.waiting){
+          return Text("loading your name...");
+        }
+
+        if (snapshot.hasData) {
+          
+          return Padding(
+            padding: const EdgeInsets.only(top: 20.0, left: 10),
+            child: Text(
+              snapshot.data!['fullname'],
+              style: const TextStyle(
+                fontSize: 24,
+              ),
+            ),
+          );
+        }
+
+        return const Text('loading....');
+      }),
     );
   }
 }
